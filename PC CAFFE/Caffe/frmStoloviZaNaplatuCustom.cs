@@ -916,18 +916,20 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
                 testVariable = false;
 
-                if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
-                    PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
+                // if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
+                //     PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
 
                 //Ako postoji uopce koja grupa da je ozancena za 4. printer u postavkama POS opreme
+                poslanoSaStola = true; // !
                 PosPrint.classPosPrintKuhinja.NapuniListuOznacenimGrupama();
                 //Ako je instaliran printer && ako ima bilo koja oznacena grupa u POS Postavke && Ako ima artikl na racunu koji se nalazi u oznacenoj grupi
                 if (DTpostavkePrinter.Rows[0][29].ToString() != "Nije instaliran" && PosPrint.classPosPrintKuhinja.listaOznacenihGrupa.Count > 0 && PosPrint.classPosPrintKuhinja.ArtiklIzOznaceneGrupePostojan)
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter10(DTsend);
-
+                poslanoSaStola = false; // !
                 classPosPrintKuhinja.broj_narudzbe = null;
             }
         }
+        public static bool poslanoSaStola = false;
 
         //Ova funkcija postavlja broj naruzdbe na sljedeci nacin:
         //Runde: 7 -> Narudzbe: 7

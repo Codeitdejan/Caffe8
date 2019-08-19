@@ -196,6 +196,8 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                     {
                         //Potrebno je provjeriti ako artikl koji je na računu ima 
                         string idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTrac.Rows[i][10].ToString());
+                        if(frmStoloviZaNaplatuCustom.poslanoSaStola)
+                            idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTrac.Rows[i][11].ToString());
                         foreach (var idGrupeIzListe in listaOznacenihGrupa)
                         {
                             artiklFound = true;
