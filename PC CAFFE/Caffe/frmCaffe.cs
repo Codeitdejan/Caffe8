@@ -1463,8 +1463,8 @@ namespace PCPOS.Caffe
                 for (int i = 0; i < dgw.Rows.Count; i++)
                 {
                     int dodatak = Convert.ToInt32(dg(i, "dod"));
-                    int idPodgrupa = Int32.Parse(dg(i, "id_podgrupa"));
-                    //a
+                    int idPodgrupa = Convert.ToInt32(dg(i, "id_podgrupa"));
+
                     if (dodatak == 0)
                     {
                         if (idPodgrupa == 1 && !sankBool)
@@ -1644,20 +1644,20 @@ namespace PCPOS.Caffe
             DataTable DTZadnjiBr = classSQL.select(sql, "na_stol").Tables[0];
             DataTable DTZadnjiBr2 = classSQL.select(sql2, "na_stol_naplaceno").Tables[0];
 
-            int broj1=0, broj2=0;
+            int broj1 = 0, broj2 = 0;
             if (!string.IsNullOrEmpty(DTZadnjiBr.Rows[0]["broj_narudzbe"].ToString()))
-                broj1= Int32.Parse(DTZadnjiBr.Rows[0]["broj_narudzbe"].ToString());
+                broj1 = Int32.Parse(DTZadnjiBr.Rows[0]["broj_narudzbe"].ToString());
             if (!string.IsNullOrEmpty(DTZadnjiBr2.Rows[0]["broj_narudzbe"].ToString()))
                 broj2 = Int32.Parse(DTZadnjiBr2.Rows[0]["broj_narudzbe"].ToString());
 
-            if(broj1!=0 && broj2 != 0)
-                return broj1 > broj2 ? broj1+1 : broj2+1;
+            if (broj1 != 0 && broj2 != 0)
+                return broj1 > broj2 ? broj1 + 1 : broj2 + 1;
 
             if (broj1 != 0 && broj2 == 0)
-                return broj1+1;
+                return broj1 + 1;
 
             if (broj1 == 0 && broj2 != 0)
-                return broj2+1;
+                return broj2 + 1;
 
             return 1;
         }
@@ -1681,7 +1681,7 @@ namespace PCPOS.Caffe
             {
                 string sifra = row["sifra_robe"].ToString();
                 int kom = Int32.Parse(row["kolicina"].ToString());
-                string mpc = row["mpc"].ToString().Replace(',','.');
+                string mpc = row["mpc"].ToString().Replace(',', '.');
                 string vpc = row["vpc"].ToString().Replace(',', '.');
                 string porez = row["porez"].ToString().Replace(',', '.');
                 string id_skladiste = row["id_skladiste"].ToString();
@@ -2496,7 +2496,8 @@ remote);
                     rfak.ShowDialog();
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.ToString());
             }
         }

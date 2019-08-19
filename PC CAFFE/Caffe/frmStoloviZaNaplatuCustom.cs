@@ -545,7 +545,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
             }
             finally
             {
-                if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran")
+                /*if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran")
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter1(DTsend);
 
                 if (DTpostavkePrinter.Rows[0]["windows_printer_name2"].ToString() != "Nije instaliran")
@@ -558,7 +558,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                 classPosPrintKuhinja.NapuniListuOznacenimGrupama();
                 //Ako je instaliran printer && ako ima bilo koja oznacena grupa u POS Postavke && Ako ima artikl na racunu koji se nalazi u oznacenoj grupi
                 if (DTpostavkePrinter.Rows[0][29].ToString() != "Nije instaliran" && classPosPrintKuhinja.listaOznacenihGrupa.Count > 0 && classPosPrintKuhinja.ArtiklIzOznaceneGrupePostojan)
-                    PosPrint.classPosPrintKuhinja.PrintOnPrinter10(DTsend);
+                    PosPrint.classPosPrintKuhinja.PrintOnPrinter10(DTsend);*/
             }
 
             provjera_sql(SQL.SQLracun.InsertStavke(DTsend));
@@ -825,7 +825,6 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
             }
             try
             {
-
                 PosPrint.classPosPrintCaffePredracun.predracun = true;
                 PosPrint.classPosPrintCaffePredracun.PrintReceipt(DTsend, "", "Predračun", sifraPartnera, "", "Predračun", "G", _odabraniStol);
                 if (DTpostavke.Rows[0]["bool_direct_print_kuhinja"].ToString() == "1")

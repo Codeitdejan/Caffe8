@@ -297,10 +297,10 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                 PrintTextLine(new string('=', RecLineChars), false);
 
-               /* for (int i = 0; i < Convert.ToInt16(DTsetting.Rows[0]["linija_praznih_bottom"].ToString()); i++)
-                {
-                    tekst += Environment.NewLine;
-                }*/
+                /* for (int i = 0; i < Convert.ToInt16(DTsetting.Rows[0]["linija_praznih_bottom"].ToString()); i++)
+                 {
+                     tekst += Environment.NewLine;
+                 }*/
 
                 _2 = tekst;
 
@@ -576,7 +576,7 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
             string printerName = "";
             if (brojPrintera == 4)
                 printerName = DTsetting.Rows[0]["windows_printer_sank"].ToString();
-            else if (brojPrintera == 3 || brojPrintera==2) 
+            else if (brojPrintera == 3 || brojPrintera == 2)
                 printerName = DTsetting.Rows[0]["windows_printer_name2"].ToString();
             else if (brojPrintera == 10)
                 printerName = DTsetting.Rows[0]["windows_printer_name3"].ToString();
