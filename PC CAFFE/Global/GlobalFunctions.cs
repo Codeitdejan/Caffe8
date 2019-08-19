@@ -98,5 +98,11 @@ namespace PCPOS.Global
             string[] dateValues = datum.ToString().Split('.');
             return new DateTime(Int32.Parse(dateValues[2]), Int32.Parse(dateValues[1]), Int32.Parse(dateValues[0]), hour, minute, sec);
         }
+
+        public static bool AutomatskoPrintanjeSankaKuhinjePicerijeNijeUkljuceno()
+        {
+            DataTable DTpostavke = classSQL.select_settings("SELECT * FROM postavke", "postavke").Tables[0];
+            return DTpostavke.Rows[0]["bool_direct_print_kuhinja"].ToString() == "0" ? true : false;
+        }
     }
 }
