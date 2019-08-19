@@ -1539,8 +1539,15 @@ namespace PCPOS.Caffe
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
                     PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
+
                 }
-                //}
+
+                frmStoloviZaNaplatuCustom.poslanoSaStola = true; // !
+                PosPrint.classPosPrintKuhinja.NapuniListuOznacenimGrupama();
+                //Ako je instaliran printer && ako ima bilo koja oznacena grupa u POS Postavke && Ako ima artikl na racunu koji se nalazi u oznacenoj grupi
+                if (DTpostavkePrinter.Rows[0][29].ToString() != "Nije instaliran" && PosPrint.classPosPrintKuhinja.listaOznacenihGrupa.Count > 0 && PosPrint.classPosPrintKuhinja.ArtiklIzOznaceneGrupePostojan)
+                    PosPrint.classPosPrintKuhinja.PrintOnPrinter10(DTsend);
+                frmStoloviZaNaplatuCustom.poslanoSaStola = false; // !
 
                 if (DSpostavke.Tables[0].Rows[0]["prijava_nakon_racuna"].ToString() == "1")
                 {
