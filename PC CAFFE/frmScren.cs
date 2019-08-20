@@ -35,7 +35,8 @@ namespace PCPOS
             try
             {
                 //Preuzmi last version.txt
-                GetTxtLastVersion();
+                GetTxtLastVersion(); // AKO SE PROGRAM SPORO OTVARA, TREBA ZAKOMENTIRATI OVU LINIJU, NO TADA NADOGRADNJA NECE BITI MOGUCA!
+                                     // TO JE ZATO JER PLEXY NE RADI ILI U TOM TRENTKU IZGUBI KONEKCIJU!
                 string lastVersion;
                 string currentPathLastVersion = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $@"lastVersion.txt");
                 using (StreamReader reader = new StreamReader(currentPathLastVersion))
@@ -43,7 +44,7 @@ namespace PCPOS
                     lastVersion = reader.ReadLine();
                 }
 
-                
+
                 string currentVersion = "Potrebna nova verzija.";
                 string currentPathCurrentVersion = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $@"currentVersion.txt");
 
@@ -51,7 +52,7 @@ namespace PCPOS
                 {
                     using (StreamReader reader = new StreamReader(currentPathCurrentVersion))
                     {
-                        currentVersion= reader.ReadLine();
+                        currentVersion = reader.ReadLine();
                     }
                 }
 
@@ -99,18 +100,43 @@ namespace PCPOS
 
         private void GetTxtLastVersion()
         {
-            string fileName = @"lastVersion.txt";
-            string url = $"ftp://5.189.154.50/CodeCaffe/{fileName}";
-            using (WebClient req = new WebClient())
+            FtpWebRequest requestDir = (FtpWebRequest)FtpWebRequest.Create($"ftp://5.189.154.50/CodeCaffe/lastVersion.txt");
+            requestDir.Credentials = new NetworkCredential("codeadmin", "Eqws64%2");
+            try
             {
-                req.Credentials = new NetworkCredential("codeadmin", "Eqws64%2");
-                byte[] fileData = req.DownloadData(url);
-
-                using(FileStream file = File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $@"{fileName}")))
+                WebResponse response = requestDir.GetResponse();
+                string fileName = @"lastVersion.txt";
+                string url = $"ftp://5.189.154.50/CodeCaffe/{fileName}";
+                using (WebClient req = new WebClient())
                 {
-                    file.Write(fileData, 0, fileData.Length);
+                    req.Credentials = new NetworkCredential("codeadmin", "Eqws64%2");
+                    byte[] fileData = req.DownloadData(url);
+
+                    using (FileStream file = File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $@"{fileName}")))
+                    {
+                        file.Write(fileData, 0, fileData.Length);
+                    }
                 }
             }
+            catch
+            {
+                MessageBox.Show("Ako trenutno postoji nova verzija, nemoguće je updateati program.","Informacija",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+            
+            /*
+             string fileName = @"lastVersion.txt";
+                string url = $"ftp://5.189.154.50/CodeCaffe/{fileName}";
+                using (WebClient req = new WebClient())
+                {
+                    req.Credentials = new NetworkCredential("codeadmin", "Eqws64%2");
+                    byte[] fileData = req.DownloadData(url);
+
+                    using (FileStream file = File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $@"{fileName}")))
+                    {
+                        file.Write(fileData, 0, fileData.Length);
+                    }
+                }
+                */
         }
 
         private void timerUpozoranaNaKrivuGodinu_Tick(object sender, EventArgs e)
