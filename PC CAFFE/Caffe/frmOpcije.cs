@@ -478,7 +478,27 @@ namespace PCPOS.Caffe
             string blagajnik = classSQL.select("SELECT ime + ' ' + prezime AS name FROM zaposlenici", "zaposlenici").Tables[0].Rows[0]["name"].ToString();
 
             barcode = "000" + DSbr.Rows[0][0].ToString();
-            PosPrint.classPosPrintCaffeNaknadno.PrintReceipt(DTsend, blagajnik, DSbr.Rows[0][0].ToString() + "/" + DateTime.Now.Year.ToString(), DSkupac.Rows[0][0].ToString(), barcode, DSbr.Rows[0][0].ToString(), "G", "");
+            if (DTpostavkePrinter.Rows[0]["posPrinterBool"].ToString() != "0")
+            {
+                PosPrint.classPosPrintCaffeNaknadno.PrintReceipt(DTsend, blagajnik, DSbr.Rows[0][0].ToString() + "/" + DateTime.Now.Year.ToString(), DSkupac.Rows[0][0].ToString(), barcode, DSbr.Rows[0][0].ToString(), "G", "");
+            }
+            else
+            {
+                if (DTsend.Rows.Count > 0)
+                {
+                    Report.Faktura.repFaktura rfak = new Report.Faktura.repFaktura();
+                    rfak.dokumenat = "RAC";
+                    rfak.ImeForme = "Račun";
+                    rfak.broj_dokumenta = DSbr.Rows[0][0].ToString();
+
+                    rfak.godina = DateTime.Now.Year.ToString();
+                    rfak.id_kasa = DTsettings.Rows[0]["default_ducan"].ToString();
+                    rfak.id_poslovnica = DTsettings.Rows[0]["default_blagajna"].ToString();
+
+                    rfak.ShowDialog();
+                }
+                //MessageBox.Show("Nema printera!");
+            }
 
             classSQL.update("UPDATE racuni SET broj_ispisa=broj_ispisa+1 WHERE broj_racuna='" + DSbr.Rows[0][0].ToString() + "'" +
                     " AND id_ducan='" + DTsettings.Rows[0]["default_ducan"].ToString() + "'" +

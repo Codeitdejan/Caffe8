@@ -102,11 +102,27 @@ namespace PCPOS.Kasa
                     " AND godina='" + DateTime.Now.Year.ToString() + "'");
 
             barcode = "000" + textBox1.Text;
-            if (DTpostavkePrinter.Rows[0]["posPrinterBool"].ToString() == "1")
+            if (DTpostavkePrinter.Rows[0]["posPrinterBool"].ToString() != "0")
             {
                 PosPrint.classPosPrintCaffeNaknadno.PrintReceipt(DTsend, imeBlagajnika, textBox1.Text + "/" + Util.Korisno.GodinaKojaSeKoristiUbazi.ToString(), DT.Rows[0]["id_kupac"].ToString(), barcode, textBox1.Text, "G", "");
 
                 this.Close();
+            }
+            else
+            {
+                if (DTsend.Rows.Count > 0)
+                {
+                    Report.Faktura.repFaktura rfak = new Report.Faktura.repFaktura();
+                    rfak.dokumenat = "RAC";
+                    rfak.ImeForme = "Račun";
+                    rfak.broj_dokumenta = textBox1.Text;
+                    rfak.godina = DateTime.Now.Year.ToString();
+                    rfak.id_kasa = DTsettings.Rows[0]["default_ducan"].ToString();
+                    rfak.id_poslovnica = DTsettings.Rows[0]["default_blagajna"].ToString();
+                    this.Hide();
+                    rfak.ShowDialog();
+                    this.Close();
+                }
             }
         }
 
