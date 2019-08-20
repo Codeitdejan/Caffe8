@@ -27,6 +27,7 @@ namespace PCPOS.PosPrint
         private static string _2;
         private static string _3;
 
+        private static string zadnji = "";
         //private static Image img_barcode = null;
 
         //Printer Pizzerija
@@ -333,6 +334,7 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                         }
                         else
                         {
+
                             string msg = "Želite li poslati narudžbu u kuhinju?";
                             string ttl = "Kuhinja";
                             if (pijaca_i_trgovacka)
@@ -347,23 +349,28 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                                 ttl = "4. Printer";
                             }
 
-                            if (MessageBox.Show(msg, ttl, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            if (zadnji != msg) // !!
                             {
-                                if (pijaca_i_trgovacka)
-                                    printaj(4);
-                                else
+                                if (MessageBox.Show(msg, ttl, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
-                                    if (koristiPrinter3)
-                                        printaj(3);
+                                    if (pijaca_i_trgovacka)
+                                        printaj(4);
                                     else
                                     {
-                                        if (koristiPrinter4)
-                                            printaj(10);
+                                        if (koristiPrinter3)
+                                            printaj(3);
                                         else
-                                            printaj(2);
+                                        {
+                                            if (koristiPrinter4)
+                                                printaj(10);
+                                            else
+                                                printaj(2);
+                                        }
                                     }
                                 }
                             }
+
+                            zadnji = msg; // !
                         }
                     }
                 }
