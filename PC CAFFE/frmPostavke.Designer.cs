@@ -48,6 +48,8 @@
             this.label49 = new System.Windows.Forms.Label();
             this.cmbFaktureKasa = new System.Windows.Forms.ComboBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.checkBoxSaljiNarudzbeAutomatski = new System.Windows.Forms.CheckBox();
+            this.label44 = new System.Windows.Forms.Label();
             this.chbPopust = new System.Windows.Forms.CheckBox();
             this.label45 = new System.Windows.Forms.Label();
             this.chbNakonPrijave = new System.Windows.Forms.CheckBox();
@@ -69,6 +71,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.chbDodatnaDopustenja = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.buttonNadograditiProgram = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.btnSpremi = new System.Windows.Forms.Button();
@@ -206,9 +209,6 @@
             this.chbUseUdsGame = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label44 = new System.Windows.Forms.Label();
-            this.checkBoxSaljiNarudzbeAutomatski = new System.Windows.Forms.CheckBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.tabSettings.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox15.SuspendLayout();
@@ -476,6 +476,24 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Dodatne opcije";
             // 
+            // checkBoxSaljiNarudzbeAutomatski
+            // 
+            this.checkBoxSaljiNarudzbeAutomatski.AutoSize = true;
+            this.checkBoxSaljiNarudzbeAutomatski.Location = new System.Drawing.Point(332, 16);
+            this.checkBoxSaljiNarudzbeAutomatski.Name = "checkBoxSaljiNarudzbeAutomatski";
+            this.checkBoxSaljiNarudzbeAutomatski.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxSaljiNarudzbeAutomatski.TabIndex = 84;
+            this.checkBoxSaljiNarudzbeAutomatski.UseVisualStyleBackColor = true;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(19, 19);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(174, 17);
+            this.label44.TabIndex = 83;
+            this.label44.Text = "Šalji narudžbe automatski:";
+            // 
             // chbPopust
             // 
             this.chbPopust.AutoSize = true;
@@ -728,6 +746,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Nadogradnja programa";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(300, 54);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 5;
+            this.button6.Text = "button6";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Visible = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // buttonNadograditiProgram
             // 
             this.buttonNadograditiProgram.BackColor = System.Drawing.Color.White;
@@ -736,9 +765,9 @@
             this.buttonNadograditiProgram.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
             this.buttonNadograditiProgram.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
             this.buttonNadograditiProgram.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonNadograditiProgram.Location = new System.Drawing.Point(21, 23);
+            this.buttonNadograditiProgram.Location = new System.Drawing.Point(22, 21);
             this.buttonNadograditiProgram.Name = "buttonNadograditiProgram";
-            this.buttonNadograditiProgram.Size = new System.Drawing.Size(240, 29);
+            this.buttonNadograditiProgram.Size = new System.Drawing.Size(240, 39);
             this.buttonNadograditiProgram.TabIndex = 4;
             this.buttonNadograditiProgram.Text = "Nadogradi program";
             this.buttonNadograditiProgram.UseVisualStyleBackColor = false;
@@ -752,9 +781,9 @@
             this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
             this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(22, 89);
+            this.button4.Location = new System.Drawing.Point(22, 70);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(240, 29);
+            this.button4.Size = new System.Drawing.Size(240, 39);
             this.button4.TabIndex = 3;
             this.button4.Text = "Nadogradi bazu";
             this.button4.UseVisualStyleBackColor = false;
@@ -2348,35 +2377,6 @@
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(19, 19);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(174, 17);
-            this.label44.TabIndex = 83;
-            this.label44.Text = "Šalji narudžbe automatski:";
-            // 
-            // checkBoxSaljiNarudzbeAutomatski
-            // 
-            this.checkBoxSaljiNarudzbeAutomatski.AutoSize = true;
-            this.checkBoxSaljiNarudzbeAutomatski.Location = new System.Drawing.Point(332, 16);
-            this.checkBoxSaljiNarudzbeAutomatski.Name = "checkBoxSaljiNarudzbeAutomatski";
-            this.checkBoxSaljiNarudzbeAutomatski.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxSaljiNarudzbeAutomatski.TabIndex = 84;
-            this.checkBoxSaljiNarudzbeAutomatski.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(300, 54);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "button6";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Visible = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // frmPostavke
             // 

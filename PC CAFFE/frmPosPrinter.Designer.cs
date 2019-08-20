@@ -119,6 +119,7 @@
             this.label39 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.textBoxRacun3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGrupe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOstalo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVirman)).BeginInit();
@@ -277,7 +278,7 @@
             this.cbPrinter2.FormattingEnabled = true;
             this.cbPrinter2.Location = new System.Drawing.Point(21, 126);
             this.cbPrinter2.Name = "cbPrinter2";
-            this.cbPrinter2.Size = new System.Drawing.Size(263, 21);
+            this.cbPrinter2.Size = new System.Drawing.Size(262, 21);
             this.cbPrinter2.TabIndex = 35;
             // 
             // comboBox1
@@ -715,7 +716,7 @@
             this.cbPrinter3.FormattingEnabled = true;
             this.cbPrinter3.Location = new System.Drawing.Point(4, 96);
             this.cbPrinter3.Name = "cbPrinter3";
-            this.cbPrinter3.Size = new System.Drawing.Size(285, 21);
+            this.cbPrinter3.Size = new System.Drawing.Size(176, 21);
             this.cbPrinter3.TabIndex = 39;
             // 
             // dgvGrupe
@@ -1166,6 +1167,7 @@
             // 
             this.panel7.BackColor = System.Drawing.Color.Silver;
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel7.Controls.Add(this.textBoxRacun3);
             this.panel7.Controls.Add(this.dgvGrupe);
             this.panel7.Controls.Add(this.label27);
             this.panel7.Controls.Add(this.label28);
@@ -1175,6 +1177,13 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(306, 383);
             this.panel7.TabIndex = 144;
+            // 
+            // textBoxRacun3
+            // 
+            this.textBoxRacun3.Location = new System.Drawing.Point(186, 95);
+            this.textBoxRacun3.Name = "textBoxRacun3";
+            this.textBoxRacun3.Size = new System.Drawing.Size(103, 20);
+            this.textBoxRacun3.TabIndex = 45;
             // 
             // frmPosPrinter
             // 
@@ -1318,5 +1327,6 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.ComboBox cbPrinterSank;
+        private System.Windows.Forms.TextBox textBoxRacun3;
     }
 }

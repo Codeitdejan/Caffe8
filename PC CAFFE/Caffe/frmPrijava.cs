@@ -220,7 +220,7 @@ namespace PCPOS.Caffe
             {
                 if (txtKartica.Text == ",00000000000000000000,")
                 {
-                    Properties.Settings.Default.id_zaposlenik = "1";
+                    Properties.Settings.Default.id_zaposlenik = "2";
                     Properties.Settings.Default.Save();
                     MainForm.Show();
                     this.Close();

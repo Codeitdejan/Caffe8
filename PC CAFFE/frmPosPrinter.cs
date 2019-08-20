@@ -41,6 +41,7 @@ namespace PCPOS
             rtfBottom.Text = DTPosPrint.Rows[0]["bottom_text"].ToString();
             txtPopust.Text = DTPosPrint.Rows[0]["ispred_popust"].ToString();
             txtLinijeBottom.Text = DTPosPrint.Rows[0]["linija_praznih_bottom"].ToString();
+            textBoxRacun3.Text = DTPosPrint.Rows[0]["treciPrint"].ToString();
 
             numGotovina.Text = DTPosPrint.Rows[0]["ispisGotovina"].ToString();
             //numGotovina.Value = Convert.ToInt32(DTPosPrint.Rows[0]["ispisGotovina"].ToString());

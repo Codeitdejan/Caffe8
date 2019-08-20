@@ -32,7 +32,7 @@ namespace PCPOS
         private void frmPostavke_Load(object sender, EventArgs e)
         {
             DataTable dtDopustenje = classSQL.select("select id_dopustenje from zaposlenici where id_zaposlenik = '" + Properties.Settings.Default.id_zaposlenik + "';", "zaposlenici").Tables[0];
-            if (dtDopustenje != null && dtDopustenje.Rows.Count > 0 && Convert.ToInt32(dtDopustenje.Rows[0][0]) == 1)
+            if (dtDopustenje != null && dtDopustenje.Rows.Count > 0 && Convert.ToInt32(dtDopustenje.Rows[0][0]) == 2)
             {
                 button4.Visible = true;
                 //grbPreuzmiSveWeb.Visible = true;

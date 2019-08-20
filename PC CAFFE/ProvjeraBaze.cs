@@ -1618,6 +1618,7 @@ alter table partners add column hormonalni_nadomjestak character varying (500);"
                 classSQL.select_settings(sql, "postavke");
             }
 
+
             //rad_sa_tabletima
             if (DTpostavke.Columns["rad_sa_tabletima"] == null) {
                 sql = "ALTER TABLE postavke ADD COLUMN rad_sa_tabletima BIT DEFAULT 0;";
@@ -2157,6 +2158,12 @@ alter table partners add column hormonalni_nadomjestak character varying (500);"
                         classSQL.insert(sql);
                         classSQL.select_settings(sql, "pos_print");
                         classSQL.update("UPDATE pos_print SET port_display_enable='0'");
+                    }
+
+                    if (DTpostavke.Columns["treciPrint"] == null)
+                    {
+                        sql = "ALTER TABLE pos_print ADD COLUMN treciPrint NVARCHAR(30) DEFAULT 'Pizzeria';";
+                        classSQL.select_settings(sql, "pos_print");
                     }
 
                     if (DTpos_print.Columns["windows_printer_sank"] == null)

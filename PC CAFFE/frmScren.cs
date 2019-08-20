@@ -102,6 +102,9 @@ namespace PCPOS
         {
             FtpWebRequest requestDir = (FtpWebRequest)FtpWebRequest.Create($"ftp://5.189.154.50/CodeCaffe/lastVersion.txt");
             requestDir.Credentials = new NetworkCredential("codeadmin", "Eqws64%2");
+            requestDir.Timeout = 5000;
+            //Ako se nakon 5 sekundi ne skine file -> npr plesk steka, izgubi mu se konekcija, tada se program pokrece automatski, no 
+            //tada nije moguce updateati program jer nije preuzeta lastVersion.txt
             try
             {
                 WebResponse response = requestDir.GetResponse();
@@ -122,6 +125,7 @@ namespace PCPOS
             {
                 MessageBox.Show("Ako trenutno postoji nova verzija, nemoguće je updateati program.","Informacija",MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
+
             
             /*
              string fileName = @"lastVersion.txt";

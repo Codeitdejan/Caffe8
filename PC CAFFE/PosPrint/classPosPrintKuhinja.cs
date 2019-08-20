@@ -311,6 +311,9 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
             }
             finally
             {
+
+                //Bolje ne dirati ovaj kod u finally jer sad radi treba, i to na svim kasama i kompjutorima. Ako se proba napraviti funkcija
+                //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
                 if (DTpostavke.Rows[0]["print_narudzbe_bez_pitanja"].ToString() == "0")
                 {
                     if (ima_stavke_za_kuhinju == true)
@@ -335,6 +338,8 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                         else
                         {
 
+                            //Bolje ne dirati ovaj kod u finally jer sad radi treba, i to na svim kasama i kompjutorima. Ako se proba napraviti funkcija
+                            //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
                             string msg = "Želite li poslati narudžbu u kuhinju?";
                             string ttl = "Kuhinja";
                             if (pijaca_i_trgovacka)
@@ -376,6 +381,8 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                 }
                 else
                 {
+                    //Bolje ne dirati ovaj kod u finally jer sad radi treba, i to na svim kasama i kompjutorima. Ako se proba napraviti funkcija
+                    //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
                     if (ima_stavke_za_kuhinju == true)
                     {
                         string msg = "Želite li poslati narudžbu u kuhinju?";
@@ -412,7 +419,6 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                                 //  }
                             }
                         }
-                        //a
                         zadnji = msg; // !
                     }
                 }

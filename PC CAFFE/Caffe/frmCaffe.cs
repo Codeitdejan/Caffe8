@@ -1351,8 +1351,20 @@ namespace PCPOS.Caffe
 
         private void btnOdjava_Click(object sender, EventArgs e)
         {
-            this.Close();
-            /*
+           /* if (Properties.Settings.Default.id_dopustenje ==2)
+                this.Close();
+            else
+            {
+                this.Hide();
+                Global.GlobalFunctions.BackupDatabase();
+                Caffe.frmPrijava p = new Caffe.frmPrijava();
+                //  MainForm.Hide();
+                //  p.MainForm = MainForm;
+                this.Close();
+                p.ShowDialog();
+                
+            }*/
+            
             switch (Properties.Settings.Default.id_dopustenje)
             {
                 case 1:
@@ -1367,7 +1379,10 @@ namespace PCPOS.Caffe
                 case 4:
                     CloseForm();
                     break;
-            }*/
+               /* default:
+                    this.Close();
+                    break;*/
+            }
         }
 
         private void CloseForm()
