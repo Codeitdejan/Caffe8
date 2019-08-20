@@ -376,19 +376,44 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                 }
                 else
                 {
-                    if (pijaca_i_trgovacka)
-                        printaj(4);
-                    else
+                    if (ima_stavke_za_kuhinju == true)
                     {
-                        if (koristiPrinter3)
-                            printaj(3);
-                        else
+                        string msg = "Želite li poslati narudžbu u kuhinju?";
+                        string ttl = "Kuhinja";
+                        if (pijaca_i_trgovacka)
                         {
-                            if (koristiPrinter4)
-                                printaj(10);
-                            else
-                                printaj(2);
+                            msg = "Želite li poslati narudžbu na šank?";
+                            ttl = "Šank";
                         }
+
+                        if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
+                        {
+                            msg = "Zelite li poslati narudzbu u piceriju?";
+                            ttl = "4. Printer";
+                        }
+
+                        if (zadnji != msg) // !!
+                        {
+                            //if (MessageBox.Show(msg, ttl, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            // {
+                            if (pijaca_i_trgovacka)
+                                printaj(4);
+                            else
+                            {
+                                if (koristiPrinter3)
+                                    printaj(3);
+                                else
+                                {
+                                    if (koristiPrinter4)
+                                        printaj(10);
+                                    else
+                                        printaj(2);
+                                }
+                                //  }
+                            }
+                        }
+                        //a
+                        zadnji = msg; // !
                     }
                 }
             }
