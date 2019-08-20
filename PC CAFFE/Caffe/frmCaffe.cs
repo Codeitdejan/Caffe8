@@ -1535,8 +1535,8 @@ namespace PCPOS.Caffe
 
                 if (DTpostavkePrinter.Rows[0]["windows_printer_name2"].ToString() != "Nije instaliran" && kuhinjaBool)
                 {
-                    //PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
-                    //PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
+                    PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
+                    PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
                     PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
 
@@ -2021,8 +2021,8 @@ sql);
                         PosPrint.classPosPrintKuhinja.PrintOnPrinter1(DTsend);
                     //PosPrint.classPosPrintKuhinja.
 
-                 //   if (DTpostavkePrinter.Rows[0]["windows_printer_name2"].ToString() != "Nije instaliran")
-                  //      PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
+                    if (DTpostavkePrinter.Rows[0]["windows_printer_name2"].ToString() != "Nije instaliran")
+                        PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
 
                     if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
                         PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);

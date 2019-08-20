@@ -1437,7 +1437,7 @@ alter table partners add column hormonalni_nadomjestak character varying (500);"
                 classSQL.Setings_Update("UPDATE postavke SET direct_print='0'");
             }
 
-            if (DTpostavke.Columns["print_narudzbi_bez_pitanja"] == null)
+            if (DTpostavke.Columns["print_narudzbe_bez_pitanja"] == null)
             {
                 sql = "ALTER TABLE postavke ADD COLUMN print_narudzbe_bez_pitanja int;";
                 classSQL.insert(sql);
