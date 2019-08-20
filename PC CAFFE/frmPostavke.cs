@@ -87,6 +87,15 @@ namespace PCPOS
                 chbPosaljiUkuhinju.Checked = true;
             }
 
+            if (DTpostavke.Rows[0]["print_narudzbe_bez_pitanja"].ToString() == "0")
+            {
+                checkBoxSaljiNarudzbeAutomatski.Checked = false;
+            }
+            else if (DTpostavke.Rows[0]["print_narudzbe_bez_pitanja"].ToString() == "1")
+            {
+                checkBoxSaljiNarudzbeAutomatski.Checked = true;
+            }
+
             try
             {
                 chbIspisNaKopijiRacuna.Checked = Convert.ToBoolean(Convert.ToInt32(DTpostavke.Rows[0]["ispis_na_kopiji_racuna"]));
@@ -513,6 +522,7 @@ namespace PCPOS
                 " certifikat_zaporka='" + txtLozinkaZaCert.Text + "'," +
                 " sustav_pdv='" + cbSustavPDV.SelectedValue + "'," +
                 " on_off_postotak='" + postotak + "'," +
+                " print_narudzbe_bez_pitanja='"+(checkBoxSaljiNarudzbeAutomatski.Checked?'1':'0')+"',"+
                 " default_kasa_fakture = '" + cmbFaktureKasa.SelectedValue + "'" +
                 "";
 
@@ -1935,5 +1945,10 @@ order by x.naziv;", cbDucan.SelectedValue, dRow[0].ToString());
             Environment.Exit(0); // Izlaz iz trenutnog programa
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DataTable DTpostavke = classSQL.select_settings("SELECT * FROM postavke", "postavke").Tables[0];
+            MessageBox.Show(DTpostavke.Rows[0]["print_narudzbe_bez_pitanja"].ToString());
+        }
     }
 }

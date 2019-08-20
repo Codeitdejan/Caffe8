@@ -1437,6 +1437,15 @@ alter table partners add column hormonalni_nadomjestak character varying (500);"
                 classSQL.Setings_Update("UPDATE postavke SET direct_print='0'");
             }
 
+            if (DTpostavke.Columns["print_narudzbi_bez_pitanja"] == null)
+            {
+                sql = "ALTER TABLE postavke ADD COLUMN print_narudzbe_bez_pitanja int;";
+                classSQL.insert(sql);
+                classSQL.select_settings(sql, "postavke");
+                classSQL.update("UPDATE postavke SET print_narudzbe_bez_pitanja='0'");
+                classSQL.Setings_Update("UPDATE postavke SET print_narudzbe_bez_pitanja='0'");
+            }
+
             if (DTpostavke.Columns["default_kasa_fakture"] == null)
             {
                 sql = "ALTER TABLE postavke ADD COLUMN default_kasa_fakture int;";

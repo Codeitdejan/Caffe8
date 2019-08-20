@@ -196,7 +196,7 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                     {
                         //Potrebno je provjeriti ako artikl koji je na računu ima 
                         string idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTrac.Rows[i][10].ToString());
-                        if(frmStoloviZaNaplatuCustom.poslanoSaStola)
+                        if (frmStoloviZaNaplatuCustom.poslanoSaStola)
                             idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTrac.Rows[i][11].ToString());
                         foreach (var idGrupeIzListe in listaOznacenihGrupa)
                         {
@@ -310,37 +310,11 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
             }
             finally
             {
-                if (ima_stavke_za_kuhinju == true)
+                if (DTpostavke.Rows[0]["print_narudzbe_bez_pitanja"].ToString() == "0")
                 {
-                    if (DTpostavke.Rows[0]["bool_direct_print_kuhinja"].ToString() == "1")
+                    if (ima_stavke_za_kuhinju == true)
                     {
-                        if (pijaca_i_trgovacka)
-                            printaj(4);
-                        else
-                        {
-                            if (koristiPrinter3)
-                                printaj(3);
-                            else
-                                printaj(2);
-                        }
-                    }
-                    else
-                    {
-                        string msg = "Želite li poslati narudžbu u kuhinju?";
-                        string ttl = "Kuhinja";
-                        if (pijaca_i_trgovacka)
-                        {
-                            msg = "Želite li poslati narudžbu na šank?";
-                            ttl = "Šank";
-                        }
-
-                        if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
-                        {
-                            msg = "Zelite li poslati narudzbu u piceriju?";
-                            ttl = "4. Printer";
-                        }
-
-                        if (MessageBox.Show(msg, ttl, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (DTpostavke.Rows[0]["bool_direct_print_kuhinja"].ToString() == "1")
                         {
                             if (pijaca_i_trgovacka)
                                 printaj(4);
@@ -356,6 +330,57 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                                         printaj(2);
                                 }
                             }
+                        }
+                        else
+                        {
+                            string msg = "Želite li poslati narudžbu u kuhinju?";
+                            string ttl = "Kuhinja";
+                            if (pijaca_i_trgovacka)
+                            {
+                                msg = "Želite li poslati narudžbu na šank?";
+                                ttl = "Šank";
+                            }
+
+                            if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
+                            {
+                                msg = "Zelite li poslati narudzbu u piceriju?";
+                                ttl = "4. Printer";
+                            }
+
+                            if (MessageBox.Show(msg, ttl, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                if (pijaca_i_trgovacka)
+                                    printaj(4);
+                                else
+                                {
+                                    if (koristiPrinter3)
+                                        printaj(3);
+                                    else
+                                    {
+                                        if (koristiPrinter4)
+                                            printaj(10);
+                                        else
+                                            printaj(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (pijaca_i_trgovacka)
+                        printaj(4);
+                    else
+                    {
+                        if (koristiPrinter3)
+                            printaj(3);
+                        else
+                        {
+                            if (koristiPrinter4)
+                                printaj(10);
+                            else
+                                printaj(2);
                         }
                     }
                 }
