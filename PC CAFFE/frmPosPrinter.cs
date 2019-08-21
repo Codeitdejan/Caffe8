@@ -233,6 +233,7 @@ namespace PCPOS
                 " ispisGotovina = '" + numGotovina.Text.ToString() + "'," +
                 " ispisKartica = '" + numKartica.Text.ToString() + "'," +
                 " ispisVirman = '" + numVirman.Text.ToString() + "'," +
+                " treciPrint = '"+textBoxRacun3.Text.ToString()+"',"+
                 " ispisOstalo = '" + numOstalo.Text.ToString() + "'," +
                 " ispisOtpremnica = '" + numOtpremnica.Text.ToString() + "'," +
                 " adresa_narudzbe_racun_kraj = '" + adresanakrajuracuna + "'" +

@@ -166,11 +166,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                 DataTable DTt = classSQL.select("SELECT ime+' '+prezime AS zaposlenik FROM zaposlenici WHERE id_zaposlenik='" + Properties.Settings.Default.id_zaposlenik + "'", "zaposlenici").Tables[0];
 
+                DataTable DTPosPrint = classSQL.select_settings("SELECT * FROM pos_print", "pos_print").Tables[0];
                 string title = "Kuhinja";
 
                 if (koristiPrinter4)
                 {
                     title = "Pizzerija";
+                    //Ako mi nije nadjena picerija u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
+                    if (DTPosPrint.Columns["treciPrint"].ToString() != null)
+                    {
+                        title = DTPosPrint.Rows[0]["treciPrint"].ToString();
+                    }
                 }
                 else
                 {
