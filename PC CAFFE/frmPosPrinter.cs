@@ -41,7 +41,16 @@ namespace PCPOS
             rtfBottom.Text = DTPosPrint.Rows[0]["bottom_text"].ToString();
             txtPopust.Text = DTPosPrint.Rows[0]["ispred_popust"].ToString();
             txtLinijeBottom.Text = DTPosPrint.Rows[0]["linija_praznih_bottom"].ToString();
-            textBoxRacun3.Text = DTPosPrint.Rows[0]["treciPrint"].ToString();
+
+            if (DTPosPrint.Columns["prviPrint"] != null)
+                textBoxRacun1.Text = DTPosPrint.Rows[0]["prviPrint"].ToString();
+
+            if (DTPosPrint.Columns["drugiPrint"] != null)
+                textBoxRacun2.Text = DTPosPrint.Rows[0]["drugiPrint"].ToString();
+
+            if (DTPosPrint.Columns["treciPrint"] != null)
+                textBoxRacun3.Text = DTPosPrint.Rows[0]["treciPrint"].ToString();
+
 
             numGotovina.Text = DTPosPrint.Rows[0]["ispisGotovina"].ToString();
             //numGotovina.Value = Convert.ToInt32(DTPosPrint.Rows[0]["ispisGotovina"].ToString());
@@ -233,7 +242,9 @@ namespace PCPOS
                 " ispisGotovina = '" + numGotovina.Text.ToString() + "'," +
                 " ispisKartica = '" + numKartica.Text.ToString() + "'," +
                 " ispisVirman = '" + numVirman.Text.ToString() + "'," +
-                " treciPrint = '"+textBoxRacun3.Text.ToString()+"',"+
+                " prviPrint = '" + textBoxRacun1.Text.ToString() + "'," +
+                " drugiPrint = '" + textBoxRacun2.Text.ToString() + "'," +
+                " treciPrint = '" + textBoxRacun3.Text.ToString() + "'," +
                 " ispisOstalo = '" + numOstalo.Text.ToString() + "'," +
                 " ispisOtpremnica = '" + numOtpremnica.Text.ToString() + "'," +
                 " adresa_narudzbe_racun_kraj = '" + adresanakrajuracuna + "'" +

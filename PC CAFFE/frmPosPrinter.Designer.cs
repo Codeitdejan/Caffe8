@@ -120,6 +120,8 @@
             this.label40 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.textBoxRacun3 = new System.Windows.Forms.TextBox();
+            this.textBoxRacun1 = new System.Windows.Forms.TextBox();
+            this.textBoxRacun2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGrupe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOstalo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVirman)).BeginInit();
@@ -278,7 +280,7 @@
             this.cbPrinter2.FormattingEnabled = true;
             this.cbPrinter2.Location = new System.Drawing.Point(21, 126);
             this.cbPrinter2.Name = "cbPrinter2";
-            this.cbPrinter2.Size = new System.Drawing.Size(262, 21);
+            this.cbPrinter2.Size = new System.Drawing.Size(163, 21);
             this.cbPrinter2.TabIndex = 35;
             // 
             // comboBox1
@@ -974,6 +976,8 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.Silver;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.textBoxRacun2);
+            this.panel2.Controls.Add(this.textBoxRacun1);
             this.panel2.Controls.Add(this.label42);
             this.panel2.Controls.Add(this.cbPrinterSank);
             this.panel2.Controls.Add(this.label29);
@@ -1030,7 +1034,7 @@
             this.cbPrinterSank.FormattingEnabled = true;
             this.cbPrinterSank.Location = new System.Drawing.Point(21, 79);
             this.cbPrinterSank.Name = "cbPrinterSank";
-            this.cbPrinterSank.Size = new System.Drawing.Size(263, 21);
+            this.cbPrinterSank.Size = new System.Drawing.Size(163, 21);
             this.cbPrinterSank.TabIndex = 41;
             // 
             // label35
@@ -1185,6 +1189,20 @@
             this.textBoxRacun3.Size = new System.Drawing.Size(103, 20);
             this.textBoxRacun3.TabIndex = 45;
             // 
+            // textBoxRacun1
+            // 
+            this.textBoxRacun1.Location = new System.Drawing.Point(187, 80);
+            this.textBoxRacun1.Name = "textBoxRacun1";
+            this.textBoxRacun1.Size = new System.Drawing.Size(94, 20);
+            this.textBoxRacun1.TabIndex = 43;
+            // 
+            // textBoxRacun2
+            // 
+            this.textBoxRacun2.Location = new System.Drawing.Point(187, 126);
+            this.textBoxRacun2.Name = "textBoxRacun2";
+            this.textBoxRacun2.Size = new System.Drawing.Size(94, 20);
+            this.textBoxRacun2.TabIndex = 44;
+            // 
             // frmPosPrinter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1328,5 +1346,7 @@
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.ComboBox cbPrinterSank;
         private System.Windows.Forms.TextBox textBoxRacun3;
+        private System.Windows.Forms.TextBox textBoxRacun2;
+        private System.Windows.Forms.TextBox textBoxRacun1;
     }
 }

@@ -2160,6 +2160,18 @@ alter table partners add column hormonalni_nadomjestak character varying (500);"
                         classSQL.update("UPDATE pos_print SET port_display_enable='0'");
                     }
 
+                    if (DTpostavke.Columns["prviPrint"] == null)
+                    {
+                        sql = "ALTER TABLE pos_print ADD COLUMN prviPrint NVARCHAR(30) DEFAULT 'Sank';";
+                        classSQL.select_settings(sql, "pos_print");
+                    }
+
+                    if (DTpostavke.Columns["drugiPrint"] == null)
+                    {
+                        sql = "ALTER TABLE pos_print ADD COLUMN drugiPrint NVARCHAR(30) DEFAULT 'Kuhinja';";
+                        classSQL.select_settings(sql, "pos_print");
+                    }
+
                     if (DTpostavke.Columns["treciPrint"] == null)
                     {
                         sql = "ALTER TABLE pos_print ADD COLUMN treciPrint NVARCHAR(30) DEFAULT 'Pizzeria';";

@@ -43,6 +43,7 @@ namespace PCPOS.PosPrint
             {
                 listaOznacenihGrupa.Add(row[0].ToString());
             }
+            zadnji = "";
         }
 
         public static bool ArtiklIzOznaceneGrupePostojan = false;
@@ -168,12 +169,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                 DataTable DTPosPrint = classSQL.select_settings("SELECT * FROM pos_print", "pos_print").Tables[0];
                 string title = "Kuhinja";
+                //Ako mi nije nadjena drugiPrint u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
+                if (DTPosPrint.Columns["drugiPrint"] != null)
+                {
+                    title = DTPosPrint.Rows[0]["drugiPrint"].ToString();
+                }
 
                 if (koristiPrinter4)
                 {
                     title = "Pizzerija";
-                    //Ako mi nije nadjena picerija u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
-                    if (DTPosPrint.Columns["treciPrint"].ToString() != null)
+                    //Ako mi nije nadjena treciPrint u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
+                    if (DTPosPrint.Columns["treciPrint"] != null)
                     {
                         title = DTPosPrint.Rows[0]["treciPrint"].ToString();
                     }
@@ -183,7 +189,15 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                     if (pijaca_i_trgovacka)
                     {
                         title = "Šank";
+
+
+                        //Ako mi nije nadjena prvi u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
+                        if (DTPosPrint.Columns["prviPrint"] != null)
+                        {
+                            title = DTPosPrint.Rows[0]["prviPrint"].ToString();
+                        }
                     }
+
                 }
 
                 PrintReceiptHeader(DateTime.Now, DTt.Rows[0]["zaposlenik"].ToString(), DTrac.Rows[0]["stol"].ToString(), title);
