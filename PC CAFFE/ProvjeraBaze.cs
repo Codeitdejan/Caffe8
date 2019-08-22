@@ -509,6 +509,26 @@ alter table izdatnica add column novo boolean default true;";
                 classSQL.select(sql, "napomene");
             }
 
+
+
+            if (DTremote.Select("table_name = 'grupe'").Length == 0)
+            {
+                sql = "CREATE TABLE grupe " +
+                                    "( " +
+                              "id_grupa integer PRIMARY KEY,"+
+                              "grupa character varying(50)," +
+                              "opis character varying(150)," +
+                              "id_podgrupa integer," +
+                              "aktivnost smallint," +
+                              "editirano boolean DEFAULT false," +
+                              "novo boolean DEFAULT true," +
+                              "is_dodatak boolean DEFAULT false," +
+                              "printer3 integer DEFAULT 0," +
+                             " is_polpol boolean DEFAULT false,"+
+                                ")";
+                classSQL.select(sql, "grupe");
+            }
+
             if (DTremote.Select("table_name = 'beauty_dug'").Length == 0)
             {
                 sql = @"alter table racun_stavke add column id_izradio integer default 0;
@@ -942,6 +962,12 @@ where id = {1};", rb, id);
             if (DTremote.Select("table_name='grupa' AND column_name='is_polpol'").Length == 0)
             {
                 sql = "ALTER TABLE grupa ADD COLUMN is_polpol boolean DEFAULT '0';";
+                classSQL.insert(sql);
+            }
+
+            if (DTremote.Select("table_name='grupa' AND column_name='printer3'").Length == 0)
+            {
+                sql = "ALTER TABLE grupa ADD COLUMN printer3 INT DEFAULT 0;";
                 classSQL.insert(sql);
             }
 

@@ -389,17 +389,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                             //Bolje ne dirati ovaj kod u finally jer sad radi treba, i to na svim kasama i kompjutorima. Ako se proba napraviti funkcija
                             //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
                             string msg = $"Želite li poslati narudžbu u {DTPosPrint.Rows[0]["drugiPrint"].ToString()}?";
-                            string ttl = "Kuhinja";
+                            string ttl = DTPosPrint.Rows[0]["drugiPrint"].ToString();
                             if (pijaca_i_trgovacka)
                             {
                                 msg = $"Želite li poslati narudžbu na {DTPosPrint.Rows[0]["prviPrint"].ToString()}?";
-                                ttl = "Šank";
+                                ttl = DTPosPrint.Rows[0]["prviPrint"].ToString();
                             }
 
                             if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
                             {
                                 msg = $"Zelite li poslati narudzbu u  {DTPosPrint.Rows[0]["treciPrint"].ToString()}?";
-                                ttl = "4. Printer";
+                                ttl = DTPosPrint.Rows[0]["treciPrint"].ToString();
                             }
 
                             if (zadnji != msg) // !!
@@ -434,17 +434,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                     if (ima_stavke_za_kuhinju == true)
                     {
                         string msg = $"Želite li poslati narudžbu u {DTPosPrint.Rows[0]["drugiPrint"].ToString()}?";
-                        string ttl = "Kuhinja";
+                        string ttl = DTPosPrint.Rows[0]["drugiPrint"].ToString();
                         if (pijaca_i_trgovacka)
                         {
                             msg = $"Želite li poslati narudžbu na {DTPosPrint.Rows[0]["prviPrint"].ToString()}?";
-                            ttl = "Šank";
+                            ttl = DTPosPrint.Rows[0]["prviPrint"].ToString();
                         }
 
                         if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
                         {
                             msg = $"Zelite li poslati narudzbu u  {DTPosPrint.Rows[0]["treciPrint"].ToString()}?";
-                            ttl = "4. Printer";
+                            ttl = DTPosPrint.Rows[0]["treciPrint"].ToString();
                         }
 
                         if (zadnji != msg) // !!
