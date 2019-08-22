@@ -82,7 +82,7 @@ namespace PCPOS.Fiskalizacija
 
         private void btnNarudzbe_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT * FROM neuspjela_fiskalizacija";
+             string sql = "SELECT * FROM neuspjela_fiskalizacija";
             DataTable DT = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
 
             Raverus.FiskalizacijaDEV.Schema.ZaglavljeType zaglavlje = new Raverus.FiskalizacijaDEV.Schema.ZaglavljeType()

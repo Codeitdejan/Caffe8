@@ -26,6 +26,7 @@ namespace PCPOS.PosPrint
         private static string _1;
         private static string _2;
         private static string _3;
+        private static bool artiklSeNalaziUOznacenojGrupi;
 
         private static string zadnji = "";
         //private static Image img_barcode = null;
@@ -80,10 +81,15 @@ namespace PCPOS.PosPrint
                 return "";
             }
         }
+        
 
+
+        //Friendly advice: If it works, don't touch it.
+        //And of course, take MUCH anti stress pills. =)
         public static void PrintOnPrinter2(DataTable DTartikli, bool koristiPrinter3 = false, bool pijaca_i_trgovacka = false, bool koristiPrinter4 = false, bool printNarudzbeNaF4 = false)
         {
             ima_stavke_za_kuhinju = false;
+            DataTable DTPosPrint = classSQL.select_settings("SELECT * FROM pos_print", "pos_print").Tables[0];
             tekst = "";
             string napomenaKolicina = "   ► ";
             try
@@ -125,7 +131,30 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                         int.TryParse(DTartikli.Rows[i]["pol"].ToString(), out pol);
 
-                        if (pijaca_i_trgovacka ? id_podgrupa != 2 : id_podgrupa == 2)
+                        ///
+                        // Ovaj dio koda koristi se za to da se na ONO što je označeno na grupama u Postavke POS Opreme printa SAMO
+                        // na 4. printeru. To znači da ti artikli ne smiju biti na printeru 2 ili 3!
+                        ///
+                        artiklSeNalaziUOznacenojGrupi = false;
+                        if (!koristiPrinter4)
+                        {
+                            NapuniListuOznacenimGrupama();
+                            string idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTartikli.Rows[i][10].ToString());
+                            if (frmStoloviZaNaplatuCustom.poslanoSaStola || frmCaffe.posaljiNarudzbeNaStol)
+                                idGrupe = PronadjiIDGrupePremaArtiklovomNazivu(DTartikli.Rows[i][11].ToString());
+                            foreach (var grupa in listaOznacenihGrupa)
+                            {
+                                if (idGrupe == grupa)
+                                {
+                                    artiklSeNalaziUOznacenojGrupi = true;
+                                    ArtiklIzOznaceneGrupePostojan = true;
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        if ((pijaca_i_trgovacka ? id_podgrupa != 2 : id_podgrupa == 2) && !artiklSeNalaziUOznacenojGrupi)
                         {
                             if (dod && artiklZaPrint)
                             {
@@ -167,7 +196,6 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                 DataTable DTt = classSQL.select("SELECT ime+' '+prezime AS zaposlenik FROM zaposlenici WHERE id_zaposlenik='" + Properties.Settings.Default.id_zaposlenik + "'", "zaposlenici").Tables[0];
 
-                DataTable DTPosPrint = classSQL.select_settings("SELECT * FROM pos_print", "pos_print").Tables[0];
                 string title = "Kuhinja";
                 //Ako mi nije nadjena drugiPrint u bazi (nije nadogradjeno, tada nemoj ni gledat ovo
                 if (DTPosPrint.Columns["drugiPrint"] != null)
@@ -360,17 +388,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
 
                             //Bolje ne dirati ovaj kod u finally jer sad radi treba, i to na svim kasama i kompjutorima. Ako se proba napraviti funkcija
                             //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
-                            string msg = "Želite li poslati narudžbu u kuhinju?";
+                            string msg = $"Želite li poslati narudžbu u {DTPosPrint.Rows[0]["drugiPrint"].ToString()}?";
                             string ttl = "Kuhinja";
                             if (pijaca_i_trgovacka)
                             {
-                                msg = "Želite li poslati narudžbu na šank?";
+                                msg = $"Želite li poslati narudžbu na {DTPosPrint.Rows[0]["prviPrint"].ToString()}?";
                                 ttl = "Šank";
                             }
 
                             if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
                             {
-                                msg = "Zelite li poslati narudzbu u piceriju?";
+                                msg = $"Zelite li poslati narudzbu u  {DTPosPrint.Rows[0]["treciPrint"].ToString()}?";
                                 ttl = "4. Printer";
                             }
 
@@ -405,17 +433,17 @@ left join grupa on roba.id_grupa = grupa.id_grupa where roba.sifra = '{0}';", DT
                     //ili nest izmijeniti, moguce je da na drugim kasama ili kompjuterima ne bude radilo!!!!!!
                     if (ima_stavke_za_kuhinju == true)
                     {
-                        string msg = "Želite li poslati narudžbu u kuhinju?";
+                        string msg = $"Želite li poslati narudžbu u {DTPosPrint.Rows[0]["drugiPrint"].ToString()}?";
                         string ttl = "Kuhinja";
                         if (pijaca_i_trgovacka)
                         {
-                            msg = "Želite li poslati narudžbu na šank?";
+                            msg = $"Želite li poslati narudžbu na {DTPosPrint.Rows[0]["prviPrint"].ToString()}?";
                             ttl = "Šank";
                         }
 
                         if (koristiPrinter4 && listaOznacenihGrupa.Count > 0)
                         {
-                            msg = "Zelite li poslati narudzbu u piceriju?";
+                            msg = $"Zelite li poslati narudzbu u  {DTPosPrint.Rows[0]["treciPrint"].ToString()}?";
                             ttl = "4. Printer";
                         }
 

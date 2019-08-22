@@ -1807,7 +1807,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;lblSat.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lblZadnjiRac.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -1840,7 +1840,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;lblZadnjiRac.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="lblKarticaUkupno.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -1873,7 +1873,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;lblKarticaUkupno.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lblKarticaKorisnik.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -1906,7 +1906,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;lblKarticaKorisnik.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="lblPrijavljen.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -1939,10 +1939,49 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;lblPrijavljen.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="panel3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Location" type="System.Drawing.Point, System.Drawing">
+    <value>323, 3</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Size" type="System.Drawing.Size, System.Drawing">
+    <value>283, 16</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Text" xml:space="preserve">
+    <value>POSTOJE NEUSPJELE FISKALIZACIJE!</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="labelPostojeNeuspjeleFiskalizacije.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;labelPostojeNeuspjeleFiskalizacije.Name" xml:space="preserve">
+    <value>labelPostojeNeuspjeleFiskalizacije</value>
+  </data>
+  <data name="&gt;&gt;labelPostojeNeuspjeleFiskalizacije.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelPostojeNeuspjeleFiskalizacije.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;labelPostojeNeuspjeleFiskalizacije.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 576</value>
@@ -1965,6 +2004,9 @@
   <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <metadata name="timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>502, 16</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -1979,30 +2021,6 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Caffe</value>
-  </data>
-  <data name="&gt;&gt;timer1.Name" xml:space="preserve">
-    <value>timer1</value>
-  </data>
-  <data name="&gt;&gt;timer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spLineDisplay.Name" xml:space="preserve">
-    <value>spLineDisplay</value>
-  </data>
-  <data name="&gt;&gt;spLineDisplay.Type" xml:space="preserve">
-    <value>System.IO.Ports.SerialPort, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bgSinkronizacija.Name" xml:space="preserve">
-    <value>bgSinkronizacija</value>
-  </data>
-  <data name="&gt;&gt;bgSinkronizacija.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;timeKarticaKupca.Name" xml:space="preserve">
-    <value>timeKarticaKupca</value>
-  </data>
-  <data name="&gt;&gt;timeKarticaKupca.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;naziv.Name" xml:space="preserve">
     <value>naziv</value>
@@ -2093,6 +2111,36 @@
   </data>
   <data name="&gt;&gt;id_podgrupa.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;timer1.Name" xml:space="preserve">
+    <value>timer1</value>
+  </data>
+  <data name="&gt;&gt;timer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;spLineDisplay.Name" xml:space="preserve">
+    <value>spLineDisplay</value>
+  </data>
+  <data name="&gt;&gt;spLineDisplay.Type" xml:space="preserve">
+    <value>System.IO.Ports.SerialPort, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bgSinkronizacija.Name" xml:space="preserve">
+    <value>bgSinkronizacija</value>
+  </data>
+  <data name="&gt;&gt;bgSinkronizacija.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;timeKarticaKupca.Name" xml:space="preserve">
+    <value>timeKarticaKupca</value>
+  </data>
+  <data name="&gt;&gt;timeKarticaKupca.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;timer2.Name" xml:space="preserve">
+    <value>timer2</value>
+  </data>
+  <data name="&gt;&gt;timer2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>frmCaffe</value>

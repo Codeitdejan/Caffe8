@@ -69,11 +69,17 @@ namespace PCPOS.Caffe
         private int beauty_osoba = 0;
         public List<OsobeDugNaplata> beauty_dug_naplata = null;
 
+        public static bool posaljiNarudzbeNaStol = false;
         //pola pola za pizze
         private int polpol = 0;
 
         private bool dodajDjelatnikaNaStavkuRacuna = false;
         private bool dodajOsobuNaRacunAutomatski = false;
+
+        private bool neuspjelaFiskalizacijaPostoji;
+        DateTime DatumVrijemePrveNeuspjeleFiskalizacije;
+        DateTime DatumVrijemePreostaloVrijemeZaFiskalizaciju;
+        private bool zmirkaj = false;
 
         private int polindex = -1;
 
@@ -98,6 +104,11 @@ namespace PCPOS.Caffe
 
         private void frmCaffe_Load(object sender, EventArgs e)
         {
+            neuspjelaFiskalizacijaPostoji = false;
+            posaljiNarudzbeNaStol = false;
+            zmirkaj = false;
+            ProvjeriNeuspjeleFiskalizacije();
+
             if (Class.Postavke.is_beauty)
             {
                 btnOtpremnica.Text = "Osobe";
@@ -189,6 +200,7 @@ namespace PCPOS.Caffe
             kartica_kupca = "";
             popust_na_cijeli_racun = 0;
             timer1.Start();
+            timer2.Start();
 
             DataGridViewRow row = dgw.RowTemplate;
             row.Height = 35;
@@ -365,6 +377,30 @@ namespace PCPOS.Caffe
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ProvjeriNeuspjeleFiskalizacije()
+        {
+            string sql = "SELECT * FROM neuspjela_fiskalizacija";
+            DataTable DTNeuspjeleFiskalizacije = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
+            if (DTNeuspjeleFiskalizacije.Rows.Count > 0)
+            {
+                neuspjelaFiskalizacijaPostoji = true;
+                //UVIJEK UZIMAMO PRVI RED!
+                string DatumVrijemeIzBaze = DTNeuspjeleFiskalizacije.Rows[0]["date"].ToString();
+                string[] DV = DatumVrijemeIzBaze.Split(' ');
+                string[] Datum = DV[0].Split('.');
+                string[] Time = DV[1].Split(':');
+                DatumVrijemePrveNeuspjeleFiskalizacije = new DateTime(
+                        Int32.Parse(Datum[2]), Int32.Parse(Datum[1]), Int32.Parse(Datum[0]),
+                        Int32.Parse(Time[0]), Int32.Parse(Time[1]), Int32.Parse(Time[2])
+                    );
+                DatumVrijemePreostaloVrijemeZaFiskalizaciju = DatumVrijemePrveNeuspjeleFiskalizacije.AddDays(2);
+            }
+            else
+            {
+                neuspjelaFiskalizacijaPostoji = false;
             }
         }
 
@@ -1349,22 +1385,23 @@ namespace PCPOS.Caffe
             }
         }
 
+
         private void btnOdjava_Click(object sender, EventArgs e)
         {
-           /* if (Properties.Settings.Default.id_dopustenje ==2)
-                this.Close();
-            else
-            {
-                this.Hide();
-                Global.GlobalFunctions.BackupDatabase();
-                Caffe.frmPrijava p = new Caffe.frmPrijava();
-                //  MainForm.Hide();
-                //  p.MainForm = MainForm;
-                this.Close();
-                p.ShowDialog();
-                
-            }*/
-            
+            /* if (Properties.Settings.Default.id_dopustenje ==2)
+                 this.Close();
+             else
+             {
+                 this.Hide();
+                 Global.GlobalFunctions.BackupDatabase();
+                 Caffe.frmPrijava p = new Caffe.frmPrijava();
+                 //  MainForm.Hide();
+                 //  p.MainForm = MainForm;
+                 this.Close();
+                 p.ShowDialog();
+
+             }*/
+
             switch (Properties.Settings.Default.id_dopustenje)
             {
                 case 1:
@@ -1379,9 +1416,9 @@ namespace PCPOS.Caffe
                 case 4:
                     CloseForm();
                     break;
-               /* default:
-                    this.Close();
-                    break;*/
+                    /* default:
+                         this.Close();
+                         break;*/
             }
         }
 
@@ -1542,6 +1579,7 @@ namespace PCPOS.Caffe
                 //if (DSpostavke.Tables[0].Rows[0]["bool_direct_print_kuhinja"].ToString() == "1")
                 //{
 
+                posaljiNarudzbeNaStol = true;
                 if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran" && sankBool)
                 {
                     PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
@@ -1550,12 +1588,14 @@ namespace PCPOS.Caffe
 
                 if (DTpostavkePrinter.Rows[0]["windows_printer_name2"].ToString() != "Nije instaliran" && kuhinjaBool)
                 {
+                    posaljiNarudzbeNaStol = true;
                     PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
+                    posaljiNarudzbeNaStol = true;
                     PosPrint.classPosPrintKuhinja.broj_narudzbe = broj_narudzbe.ToString();
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
-
                 }
+                posaljiNarudzbeNaStol = false;
 
                 frmStoloviZaNaplatuCustom.poslanoSaStola = true; // !
                 PosPrint.classPosPrintKuhinja.NapuniListuOznacenimGrupama();
@@ -2677,10 +2717,33 @@ remote);
 
             startTimerKartica(true, true, true);
         }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             lblSat.Text = DateTime.Now.ToString();
+
+            if (neuspjelaFiskalizacijaPostoji)
+            {
+                //labelPostojeNeuspjeleFiskalizacije.Visible = zmirkaj;
+                //zmirkaj = !zmirkaj;
+            }
+        }
+
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            ProvjeriNeuspjeleFiskalizacije(); // Svaki put kad timer 2 ticka, provjeri dal mozda postoji neuspjela fiskalizacija -> 
+                                            // Timer 2 postavljen na 60000 MS -> 1 Minuta. Svaku minutu provjeravamo dal ima neuspjelih fiskalizacija ili ne.
+            if (neuspjelaFiskalizacijaPostoji)
+            {
+                DateTime DatumVrijemeSada = DateTime.Now;
+                var hours = (DatumVrijemePreostaloVrijemeZaFiskalizaciju - DatumVrijemeSada).TotalHours;
+               // labelPostojeNeuspjeleFiskalizacije.Visible = true;
+                labelPostojeNeuspjeleFiskalizacije.Text = "POSTOJE NEUSPJELE FISKALIZACIJE! (PREOSTALO: " + hours.ToString("#0.00") + " SATI)";
+            }
+            else
+            {
+                //labelPostojeNeuspjeleFiskalizacije.Visible = false;
+            }
         }
 
         private void btnPredjela_Click(object sender, EventArgs e)

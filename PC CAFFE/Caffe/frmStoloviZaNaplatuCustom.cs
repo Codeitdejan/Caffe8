@@ -908,6 +908,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
 
                 PostaviBrojNarudzbe();
 
+                frmCaffe.posaljiNarudzbeNaStol = true; 
                 if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran")
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter1(DTsend);
 
@@ -918,6 +919,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
 
                  if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
                      PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
+                frmCaffe.posaljiNarudzbeNaStol = false;
 
                 //Ako postoji uopce koja grupa da je ozancena za 4. printer u postavkama POS opreme
                 poslanoSaStola = true; // !
