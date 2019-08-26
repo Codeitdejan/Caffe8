@@ -52,6 +52,7 @@
             this.dateTimePickerZavrsni = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // labelSlanjeDokumentacije
@@ -291,12 +292,20 @@
             this.label4.TabIndex = 30;
             this.label4.Text = "Završni datum:";
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(15, 535);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(408, 32);
+            this.progressBar1.TabIndex = 31;
+            // 
             // FrmPostavkeZaSlanjeDokumentacije
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(439, 531);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dateTimePickerZavrsni);
@@ -357,5 +366,6 @@
         private System.Windows.Forms.DateTimePicker dateTimePickerZavrsni;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

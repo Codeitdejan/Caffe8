@@ -82,69 +82,58 @@ namespace PCPOS.Fiskalizacija
 
         private void btnNarudzbe_Click(object sender, EventArgs e)
         {
-            DateTime datum = Convert.ToDateTime(dgw.Rows[dgw.CurrentCell.RowIndex].Cells["datum"].Value.ToString());
-            DateTime datumZadnjeMoguceFiskalizacije = datum.AddDays(2);
-            DateTime trenutniDatum = DateTime.Now;
+            string sql = "SELECT * FROM neuspjela_fiskalizacija";
+            DataTable DT = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
 
-           /* if (trenutniDatum.CompareTo(datumZadnjeMoguceFiskalizacije) == 1)
+            Raverus.FiskalizacijaDEV.Schema.ZaglavljeType zaglavlje = new Raverus.FiskalizacijaDEV.Schema.ZaglavljeType()
             {
-                MessageBox.Show("Ne možete fiskalizirati račune starije od 48h. Nazovite Code-IT.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else*/
+                DatumVrijeme = Razno.DohvatiFormatiranoTrenutnoDatumVrijeme(),
+                IdPoruke = Guid.NewGuid().ToString()
+            };
+
+            X509Certificate2 certifikat = Raverus.FiskalizacijaDEV.PopratneFunkcije.Potpisivanje.DohvatiCertifikat(DTfis.Rows[0]["naziv_certifikata"].ToString());
+            string datum_vrijeme = DateTime.Now.ToString("dd.MM.yyyyThh:mm:ss");
+
+            for (int i = 0; i < DT.Rows.Count; i++)
             {
-                string sql = "SELECT * FROM neuspjela_fiskalizacija";
-                DataTable DT = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
+                XmlDocument dokument = new XmlDocument();
+                dokument.LoadXml(DT.Rows[i]["xml"].ToString());
+                XmlNamespaceManager ns = new XmlNamespaceManager(dokument.NameTable);
+                ns.AddNamespace("tns", "http://www.apis-it.hr/fin/2012/types/f73");
+                string d = dokument.SelectSingleNode("/tns:RacunZahtjev/tns:Racun/tns:NakDost", ns).ChildNodes[0].Value = "true";
 
-                Raverus.FiskalizacijaDEV.Schema.ZaglavljeType zaglavlje = new Raverus.FiskalizacijaDEV.Schema.ZaglavljeType()
+                Raverus.FiskalizacijaDEV.CentralniInformacijskiSustav cis = new CentralniInformacijskiSustav();
+                if (Class.Postavke.TEST_FISKALIZACIJA)
                 {
-                    DatumVrijeme = Razno.DohvatiFormatiranoTrenutnoDatumVrijeme(),
-                    IdPoruke = Guid.NewGuid().ToString()
-                };
-
-                X509Certificate2 certifikat = Raverus.FiskalizacijaDEV.PopratneFunkcije.Potpisivanje.DohvatiCertifikat(DTfis.Rows[0]["naziv_certifikata"].ToString());
-                string datum_vrijeme = DateTime.Now.ToString("dd.MM.yyyyThh:mm:ss");
-
-                for (int i = 0; i < DT.Rows.Count; i++)
+                    cis.CisUrl = "https://cistest.apis-it.hr:8449/FiskalizacijaServiceTest";
+                }
+                else
                 {
-                    XmlDocument dokument = new XmlDocument();
-                    dokument.LoadXml(DT.Rows[i]["xml"].ToString());
-                    XmlNamespaceManager ns = new XmlNamespaceManager(dokument.NameTable);
-                    ns.AddNamespace("tns", "http://www.apis-it.hr/fin/2012/types/f73");
-                    string d = dokument.SelectSingleNode("/tns:RacunZahtjev/tns:Racun/tns:NakDost", ns).ChildNodes[0].Value = "true";
+                    cis.CisUrl = "https://cis.porezna-uprava.hr:8449/FiskalizacijaService";
+                }
+                Raverus.FiskalizacijaDEV.PopratneFunkcije.Potpisivanje.PotpisiXmlDokument(dokument, certifikat);
+                Raverus.FiskalizacijaDEV.PopratneFunkcije.XmlDokumenti.DodajSoapEnvelope(ref dokument);
 
-                    Raverus.FiskalizacijaDEV.CentralniInformacijskiSustav cis = new CentralniInformacijskiSustav();
-                    if (Class.Postavke.TEST_FISKALIZACIJA)
-                    {
-                        cis.CisUrl = "https://cistest.apis-it.hr:8449/FiskalizacijaServiceTest";
-                    }
-                    else
-                    {
-                        cis.CisUrl = "https://cis.porezna-uprava.hr:8449/FiskalizacijaService";
-                    }
-                    Raverus.FiskalizacijaDEV.PopratneFunkcije.Potpisivanje.PotpisiXmlDokument(dokument, certifikat);
-                    Raverus.FiskalizacijaDEV.PopratneFunkcije.XmlDokumenti.DodajSoapEnvelope(ref dokument);
+                try
+                {
+                    DateTime dd;
+                    DateTime.TryParse(DT.Rows[i]["date"].ToString(), out dd);
+                    string id_kasa = DT.Rows[i]["id_kasa"].ToString();
+                    string id_ducan = DT.Rows[i]["id_ducan"].ToString();
 
-                    try
-                    {
-                        DateTime dd;
-                        DateTime.TryParse(DT.Rows[i]["date"].ToString(), out dd);
-                        string id_kasa = DT.Rows[i]["id_kasa"].ToString();
-                        string id_ducan = DT.Rows[i]["id_ducan"].ToString();
+                    XmlDocument odgovor = cis.PosaljiSoapPoruku(dokument);
+                    string jir = Raverus.FiskalizacijaDEV.PopratneFunkcije.XmlDokumenti.DohvatiJir(odgovor);
 
-                        XmlDocument odgovor = cis.PosaljiSoapPoruku(dokument);
-                        string jir = Raverus.FiskalizacijaDEV.PopratneFunkcije.XmlDokumenti.DohvatiJir(odgovor);
+                    provjera_sql(classSQL.delete("DELETE FROM neuspjela_fiskalizacija WHERE broj_racuna='" + DT.Rows[i]["broj_racuna"].ToString() + "'" +
+                        " AND id_kasa='" + id_kasa + "' AND id_ducan='" + id_ducan + "'"));
 
-                        provjera_sql(classSQL.delete("DELETE FROM neuspjela_fiskalizacija WHERE broj_racuna='" + DT.Rows[i]["broj_racuna"].ToString() + "'" +
-                            " AND id_kasa='" + id_kasa + "' AND id_ducan='" + id_ducan + "'"));
-
-                        provjera_sql(classSQL.update("UPDATE racuni SET jir='" + jir + "' WHERE broj_racuna='" + DT.Rows[i]["broj_racuna"].ToString() + "'" +
-                            " AND godina='" + dd.Year.ToString() + "' AND id_kasa='" + id_kasa + "' AND id_ducan='" + id_ducan + "'" +
-                            ""));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Greška kod fiskalizacije\r\n\r\n\r\n" + cis.OdgovorGreska.InnerXml + ex.ToString() + "\r\n\r\n\r\n\r\n\r\n" + ex.ToString(), "Greška od strane FINE");
-                    }
+                    provjera_sql(classSQL.update("UPDATE racuni SET jir='" + jir + "' WHERE broj_racuna='" + DT.Rows[i]["broj_racuna"].ToString() + "'" +
+                        " AND godina='" + dd.Year.ToString() + "' AND id_kasa='" + id_kasa + "' AND id_ducan='" + id_ducan + "'" +
+                        ""));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška kod fiskalizacije\r\n\r\n\r\n" + cis.OdgovorGreska.InnerXml + ex.ToString() + "\r\n\r\n\r\n\r\n\r\n" + ex.ToString(), "Greška od strane FINE");
                 }
 
                 Set();

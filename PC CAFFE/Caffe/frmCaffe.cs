@@ -445,7 +445,7 @@ namespace PCPOS.Caffe
                 if (datumZadnjeMoguceFiskalizacijeRacunaSGreskom.CompareTo(datumZadnjeMoguceFiskalizacije) == -1)
                     datumZadnjeMoguceFiskalizacije = datumZadnjeMoguceFiskalizacijeRacunaSGreskom;
 
-                   MessageBox.Show(datumZadnjeMoguceFiskalizacije.ToString());
+                //   MessageBox.Show(datumZadnjeMoguceFiskalizacije.ToString());
             }
             else
             {

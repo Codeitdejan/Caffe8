@@ -11,17 +11,25 @@ using System.Windows.Forms;
 using System.Net.Mail;
 using System.Net;
 using System.Net.Mime;
+using System.Threading;
 
 namespace PCPOS
 {
     public partial class FrmPostavkeZaSlanjeDokumentacije : Form
     {
         /// <summary>
+        /// Global variables
+        /// </summary>
+        int currentProgressBarValue;
+        int maximumProgressBarValue;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public FrmPostavkeZaSlanjeDokumentacije()
         {
             InitializeComponent();
+            currentProgressBarValue = 0;
         }
 
         /// <summary>
@@ -29,15 +37,78 @@ namespace PCPOS
         /// </summary>
         private void buttonPrintanje_Click(object sender, EventArgs e)
         {
+            if (CountChecked() == 0)
+            {
+                MessageBox.Show("Morate odabrati barem jedan dokument za slanje.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             MessageBox.Show("Nakon pritiska na gumb OK, svi označeni dokumenti generirat će se i bit poslani knjigovodstvu.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
             MessageBox.Show("Molimo Vas da NE DIRATE NIŠTA do trenutka kad dobijete poruku da je mail poslan. Na slabijim računalima ovo može potrajati i par minuta.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            ObrisiDirektorijAkoPostoji();
+            //Threading
+            ShowAndSetPropertiesOfProgressBar();
+            ProgressBar.CheckForIllegalCrossThreadCalls = false;
+            Thread th = new Thread(UpdateProgressBar);
+            th.Start();
+
+           // ObrisiDirektorijAkoPostoji();
             StvoriDirektorijAkoNePostoji();
             ProvjeriIzlazneListe(); // Fale izdatnice, otpis robe i usklada robe - Dejan: "Jos nije napravljeno."
             ProvjeriPromet();
             PosaljiEmail();
 
+        }
+
+        /// <summary>
+        /// Ova metoda sluzi kako bi se postavili propertyji i prikazao progressbar.
+        /// </summary>
+        private void ShowAndSetPropertiesOfProgressBar()
+        {
+            this.Height = 615;
+            maximumProgressBarValue = CountChecked();
+            progressBar1.Maximum = maximumProgressBarValue;
+            progressBar1.Value = 0;
+        }
+
+        /// <summary>
+        /// Ovo je THREAD funkcija.
+        /// Sluzi kako bi se updateala vrijednost u progression baru
+        /// </summary>
+        private void UpdateProgressBar()
+        {
+            while (currentProgressBarValue < maximumProgressBarValue)
+            {
+                progressBar1.Value = currentProgressBarValue;
+            }
+
+            if (currentProgressBarValue== maximumProgressBarValue)
+            {
+                progressBar1.Value = maximumProgressBarValue;
+            }
+        }
+ 
+        /// <summary>
+        /// Ova funkcija sluzi za brojanje koliko je check boxeva checkano.
+        /// </summary>
+        private int CountChecked()
+        {
+            int count = 0;
+            if (checkBoxKalkulacije.Checked) count++;
+            if (checkBoxPrimke.Checked) count++;
+            if (checkBoxFakture.Checked) count++;
+            if (checkBoxIzdatnice.Checked) count++;
+            if (checkBoxOtpisRobe.Checked) count++;
+            //Usklade nema jos pa nema niti counta za nju
+            if (checkBoxPPMIPOObrazac.Checked) count++;
+            if (checkBoxObracunPorezaIPrometa.Checked) count++;
+            if (checkBoxObracunGrupeProizvoda.Checked) count++;
+            if (checkBoxObracunPrometaPoDanima.Checked) count++;
+            if (checkBoxPrometKase.Checked) count++;
+            if (checkBoxPice.Checked) count++;
+            if (checkBoxHrana.Checked) count++;
+            if (checkBoxTrgovackaRoba.Checked) count++;
+            if (checkBoxUkupno.Checked) count++;
+            return count;
         }
 
 
@@ -83,30 +154,35 @@ namespace PCPOS
             //Kalkulacije
             if (checkBoxKalkulacije.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniRacuni frmIzlazniRacuni = new IzlazniRacuni(true, "kalk", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmIzlazniRacuni.ShowDialog();
             }
             //Primke
             if (checkBoxPrimke.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniRacuni frmIzlazniRacuni = new IzlazniRacuni(true, "prim", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmIzlazniRacuni.ShowDialog();
             }
             //Fakture
-            if (checkBoxPrimke.Checked)
+            if (checkBoxFakture.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniRacuni frmIzlazniRacuni = new IzlazniRacuni(true, "fakt", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmIzlazniRacuni.ShowDialog();
             }
             //Izdatnice
             if (checkBoxIzdatnice.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniRacuni frmIzlazniRacuni = new IzlazniRacuni(true, "izd", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmIzlazniRacuni.ShowDialog();
             }
             //Otpis robe
             if (checkBoxOtpisRobe.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniRacuni frmIzlazniRacuni = new IzlazniRacuni(true, "otp_rob", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmIzlazniRacuni.ShowDialog();
             }
@@ -122,54 +198,63 @@ namespace PCPOS
             //PP-MI-PO Obrazac
             if (checkBoxPPMIPOObrazac.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniDokumenti.PPMIPOForm ppmipoForm = new IzlazniDokumenti.PPMIPOForm(true, dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 ppmipoForm.ShowDialog();
             }
             //Obracun poreza i prometa
             if (checkBoxObracunPorezaIPrometa.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniDokumenti.ObracunForm frmObracun = new IzlazniDokumenti.ObracunForm(true, dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 frmObracun.ShowDialog();
             }
             //Obracun grupe proizvoda
             if (checkBoxObracunGrupeProizvoda.Checked)
             {
+                currentProgressBarValue++;
                 IzlazniDokumenti.ObracunGrupeProizvodaForm obracunGrupeProizvodaForm = new IzlazniDokumenti.ObracunGrupeProizvodaForm(true, dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 obracunGrupeProizvodaForm.ShowDialog();
             }
             //Obracun prometa po danima
             if (checkBoxObracunPrometaPoDanima.Checked)
             {
+                currentProgressBarValue++;
                 Report.PrometiPoDanima.frmIspisProdajnihArtiklaPoDanima formIspisProdajnihArtiklaPoDanima = new Report.PrometiPoDanima.frmIspisProdajnihArtiklaPoDanima(true, dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formIspisProdajnihArtiklaPoDanima.ShowDialog();
             }
             //Promet kase
             if (checkBoxPrometKase.Checked)
             {
+                currentProgressBarValue++;
                 Kasa.frmPrometKase formPrometKase = new Kasa.frmPrometKase(true, dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formPrometKase.ShowDialog();
             }
             //Promet po prodajnoj robi
             if (checkBoxPice.Checked)
             {
+                currentProgressBarValue++;
                 Caffe.frmProdajnaRoba formProdajnaRoba = new Caffe.frmProdajnaRoba(true, "Pice", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formProdajnaRoba.ShowDialog();
             }
 
             if (checkBoxHrana.Checked)
             {
+                currentProgressBarValue++;
                 Caffe.frmProdajnaRoba formProdajnaRoba = new Caffe.frmProdajnaRoba(true, "Hrana", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formProdajnaRoba.ShowDialog();
             }
 
             if (checkBoxTrgovackaRoba.Checked)
             {
+                currentProgressBarValue++;
                 Caffe.frmProdajnaRoba formProdajnaRoba = new Caffe.frmProdajnaRoba(true, "TrgRoba", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formProdajnaRoba.ShowDialog();
             }
 
             if (checkBoxUkupno.Checked)
             {
+                currentProgressBarValue++;
                 Caffe.frmProdajnaRoba formProdajnaRoba = new Caffe.frmProdajnaRoba(true, "Ukupno", dateTimePickerPocetni.Value, dateTimePickerZavrsni.Value);
                 formProdajnaRoba.ShowDialog();
             }
@@ -207,7 +292,10 @@ namespace PCPOS
 
                 //Send E-Mail
                 SmtpServer.Send(mail);
+                mail.Attachments.Dispose(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 MessageBox.Show("Odabrani dokumenti poslani su knjigovodstvu.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             }
             catch (Exception ex)
             {
@@ -242,6 +330,7 @@ namespace PCPOS
             foreach (FileInfo file in Files)
             {
                 mail.Attachments.Add(new Attachment(AppDomain.CurrentDomain.BaseDirectory + $@"Dokumenti\{file.Name}"));
+               // file.Delete();
             }
         }
     }
