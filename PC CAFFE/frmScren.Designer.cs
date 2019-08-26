@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -73,6 +73,11 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.labelPostojeNeuspjeleFiskalizacije = new System.Windows.Forms.Label();
+            this.labelHitnoNazoviteCodeIt = new System.Windows.Forms.Label();
+            this.labelPreostaloVrijeme = new System.Windows.Forms.Label();
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.timer4 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Chart1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -201,16 +206,16 @@
             // 
             this.Chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Chart1.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
-            chartArea1.Name = "ChartArea1";
-            this.Chart1.ChartAreas.Add(chartArea1);
+            chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
+            chartArea2.Name = "ChartArea1";
+            this.Chart1.ChartAreas.Add(chartArea2);
             this.Chart1.Location = new System.Drawing.Point(0, 49);
             this.Chart1.Name = "Chart1";
             this.Chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-            series1.ChartArea = "ChartArea1";
-            series1.Name = "Series1";
-            series1.YValuesPerPoint = 2;
-            this.Chart1.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Name = "Series1";
+            series2.YValuesPerPoint = 2;
+            this.Chart1.Series.Add(series2);
             this.Chart1.Size = new System.Drawing.Size(607, 268);
             this.Chart1.TabIndex = 5;
             this.Chart1.Text = "chart1";
@@ -471,7 +476,7 @@
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(521, 64);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(352, 17);
+            this.label4.Size = new System.Drawing.Size(381, 17);
             this.label4.TabIndex = 12;
             this.label4.Text = "Verzija programa: 1.3";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -681,6 +686,55 @@
             this.label5.Text = "PC POS";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // labelPostojeNeuspjeleFiskalizacije
+            // 
+            this.labelPostojeNeuspjeleFiskalizacije.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelPostojeNeuspjeleFiskalizacije.BackColor = System.Drawing.Color.Transparent;
+            this.labelPostojeNeuspjeleFiskalizacije.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPostojeNeuspjeleFiskalizacije.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelPostojeNeuspjeleFiskalizacije.Location = new System.Drawing.Point(673, 9);
+            this.labelPostojeNeuspjeleFiskalizacije.Name = "labelPostojeNeuspjeleFiskalizacije";
+            this.labelPostojeNeuspjeleFiskalizacije.Size = new System.Drawing.Size(254, 23);
+            this.labelPostojeNeuspjeleFiskalizacije.TabIndex = 15;
+            this.labelPostojeNeuspjeleFiskalizacije.Text = "Postoje neuspjele fiskalizacije!";
+            this.labelPostojeNeuspjeleFiskalizacije.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelHitnoNazoviteCodeIt
+            // 
+            this.labelHitnoNazoviteCodeIt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelHitnoNazoviteCodeIt.BackColor = System.Drawing.Color.Transparent;
+            this.labelHitnoNazoviteCodeIt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHitnoNazoviteCodeIt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelHitnoNazoviteCodeIt.Location = new System.Drawing.Point(709, 61);
+            this.labelHitnoNazoviteCodeIt.Name = "labelHitnoNazoviteCodeIt";
+            this.labelHitnoNazoviteCodeIt.Size = new System.Drawing.Size(209, 23);
+            this.labelHitnoNazoviteCodeIt.TabIndex = 16;
+            this.labelHitnoNazoviteCodeIt.Text = "HITNO nazovite Code-IT";
+            this.labelHitnoNazoviteCodeIt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelPreostaloVrijeme
+            // 
+            this.labelPreostaloVrijeme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelPreostaloVrijeme.BackColor = System.Drawing.Color.Transparent;
+            this.labelPreostaloVrijeme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPreostaloVrijeme.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.labelPreostaloVrijeme.Location = new System.Drawing.Point(567, 35);
+            this.labelPreostaloVrijeme.Name = "labelPreostaloVrijeme";
+            this.labelPreostaloVrijeme.Size = new System.Drawing.Size(360, 23);
+            this.labelPreostaloVrijeme.TabIndex = 17;
+            this.labelPreostaloVrijeme.Text = "Preostalo vrijeme: 48.43h";
+            this.labelPreostaloVrijeme.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // timer3
+            // 
+            this.timer3.Interval = 10000;
+            this.timer3.Tick += new System.EventHandler(this.timer3_Tick_1);
+            // 
+            // timer4
+            // 
+            this.timer4.Interval = 30000;
+            this.timer4.Tick += new System.EventHandler(this.timer4_Tick);
+            // 
             // frmScren
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -689,6 +743,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1129, 592);
             this.ControlBox = false;
+            this.Controls.Add(this.labelHitnoNazoviteCodeIt);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.labelPreostaloVrijeme);
+            this.Controls.Add(this.labelPostojeNeuspjeleFiskalizacije);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.panel4);
@@ -703,7 +761,6 @@
             this.Controls.Add(this.lblSat);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label4);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmScren";
@@ -766,5 +823,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnFakture;
         private System.Windows.Forms.Button kalkulacijeButton;
+        private System.Windows.Forms.Label labelPostojeNeuspjeleFiskalizacije;
+        private System.Windows.Forms.Label labelHitnoNazoviteCodeIt;
+        private System.Windows.Forms.Label labelPreostaloVrijeme;
+        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.Timer timer4;
     }
 }

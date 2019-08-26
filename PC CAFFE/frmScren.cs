@@ -15,9 +15,10 @@ namespace PCPOS
         public frmScren()
         {
             InitializeComponent();
+
+
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
             this.BackColor = Class.Postavke.backGround;
-            //this.DoubleBuffered = true;
         }
 
         public frmMenu MainForm { get; set; }
@@ -25,8 +26,16 @@ namespace PCPOS
         private string id_kasa;
         private string id_ducan;
 
+        public static bool neuspjelaFiskalizacijaPostoji;
+        public static DateTime datumPrveNeuspjeleFiskalizacije;
+        public static DateTime datumZadnjeMoguceFiskalizacije;
+        public static DateTime datumPrvogRacunaSGreskom;
+        public static DateTime datumZadnjeMoguceFiskalizacijeRacunaSGreskom;
+        public static DateTime danasnjiDatum;
+
         private void frmScren_Load(object sender, EventArgs e)
         {
+
             this.Paint += new PaintEventHandler(Class.Postavke.changeBackground);
 
             id_kasa = DTpostavke.Rows[0]["default_blagajna"].ToString();
@@ -92,9 +101,83 @@ namespace PCPOS
                 PieStart(10);
                 btnMaloprodaja.Select();
                 txtBrojDana.Text = "10";
+
+                //Postoje neuspjele fiskalizacije
+                timer3.Start();
+                timer4.Start();
+                neuspjelaFiskalizacijaPostoji = false;
+                ProvjeriPostojiLiNeuspjelaFiskalizacija();
+
+                if (neuspjelaFiskalizacijaPostoji)
+                {
+                    danasnjiDatum = DateTime.Now;
+                    var preostaloVrijemeFiskalizacije = (datumZadnjeMoguceFiskalizacije - danasnjiDatum).TotalHours;
+                    labelPreostaloVrijeme.Text = "Preostalo vrijeme: " + preostaloVrijemeFiskalizacije.ToString("#0.00h");
+                }
             }
             catch
             {
+            }
+        }
+
+        public static void ProvjeriPostojiLiNeuspjelaFiskalizacija()
+        {
+            string sql = "SELECT * FROM neuspjela_fiskalizacija";
+            DataTable DTNeuspjeleFiskalizacije = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
+            string broj_rac = "";
+            string query = @"SELECT
+                            racuni.broj_racuna,
+                            racuni.datum_racuna,
+                            ducan.ime_ducana,
+                            racuni.id_ducan,
+                            blagajna.ime_blagajne,
+                            racuni.nacin_placanja,
+                            racuni.id_blagajnik,
+                            racuni.id_kasa,
+                            racuni.godina,
+                            SUM(
+                            CAST(mpc AS NUMERIC)*
+                            CAST(REPLACE(kolicina,',','.') AS NUMERIC)
+                            ) AS ukupno
+                            FROM racun_stavke
+                            LEFT JOIN racuni ON racuni.broj_racuna=racun_stavke.broj_racuna AND racuni.godina=racun_stavke.godina AND racuni.id_ducan=racun_stavke.id_ducan AND racuni.id_kasa=racun_stavke.id_blagajna
+                            LEFT JOIN ducan ON ducan.id_ducan=racuni.id_ducan
+                            LEFT JOIN blagajna ON blagajna.id_blagajna=racuni.id_kasa
+                            WHERE ((jir='' AND zik='') OR (jir IS NULL AND zik IS NULL)) " + broj_rac + @" AND racun_stavke.id_ducan='" + Util.Korisno.idDucan + @"' AND racun_stavke.id_blagajna='" + Util.Korisno.idKasa + @"'
+                            GROUP BY racuni.broj_racuna,racuni.godina,racuni.datum_racuna,ducan.ime_ducana,blagajna.ime_blagajne,
+                            racuni.id_blagajnik,racuni.nacin_placanja,racuni.id_ducan,racuni.id_kasa,racuni.godina
+                            ORDER BY racuni.datum_racuna ASC;";
+            DataTable DTRacuniSGreskom = classSQL.select(query, "racuni").Tables[0];
+
+            //Ako se sfiskalizira i zapis nestane s tablice neuspjela_fiskalizacija
+            //ne bude se updatealo, zato jer su varijable i dalje imaju one stare vrijednosti.
+            //To treba samo tu napraviti na frmScren, jer na frmCaffe je nemoguce naknadno fiskalizirati racun.
+            if (DTNeuspjeleFiskalizacije.Rows.Count > 0 || DTRacuniSGreskom.Rows.Count > 0)
+            {
+                neuspjelaFiskalizacijaPostoji = true;
+                datumPrveNeuspjeleFiskalizacije = DateTime.MaxValue;
+                datumPrvogRacunaSGreskom = DateTime.MaxValue;
+                datumZadnjeMoguceFiskalizacije = DateTime.MaxValue;
+                datumZadnjeMoguceFiskalizacijeRacunaSGreskom = DateTime.MaxValue;
+
+                if (DTNeuspjeleFiskalizacije.Rows.Count > 0)
+                {
+                    datumPrveNeuspjeleFiskalizacije = Convert.ToDateTime(DTNeuspjeleFiskalizacije.Rows[0]["date"].ToString());
+                    datumZadnjeMoguceFiskalizacije = datumPrveNeuspjeleFiskalizacije.AddDays(2);
+                }
+
+                if (DTRacuniSGreskom.Rows.Count > 0)
+                {
+                    datumPrvogRacunaSGreskom = Convert.ToDateTime(DTRacuniSGreskom.Rows[0]["datum_racuna"].ToString());
+                    datumZadnjeMoguceFiskalizacijeRacunaSGreskom = datumPrvogRacunaSGreskom.AddDays(2);
+                }
+
+                if (datumZadnjeMoguceFiskalizacijeRacunaSGreskom.CompareTo(datumZadnjeMoguceFiskalizacije) == -1)
+                    datumZadnjeMoguceFiskalizacije = datumZadnjeMoguceFiskalizacijeRacunaSGreskom;
+            }
+            else
+            {
+                neuspjelaFiskalizacijaPostoji = false;
             }
         }
 
@@ -123,10 +206,10 @@ namespace PCPOS
             }
             catch
             {
-                MessageBox.Show("Ako trenutno postoji nova verzija, nemoguće je updateati program.","Informacija",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show("Ako trenutno postoji nova verzija, nemoguće je updateati program.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            
+
             /*
              string fileName = @"lastVersion.txt";
                 string url = $"ftp://5.189.154.50/CodeCaffe/{fileName}";
@@ -541,6 +624,7 @@ namespace PCPOS
             SetMoneyValue();
         }
 
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             //Caffe.frmPrijava p = new Caffe.frmPrijava();
@@ -554,6 +638,35 @@ namespace PCPOS
             DateTime _datum = DateTime.Now;
             lblSat.Text = _datum.ToString("H:mm:ss");
             lblDatum.Text = _datum.ToString("dd.MM.yyyy.");
+        }
+
+        //Update vrijednosti svakih 10 sec.
+        private void timer3_Tick_1(object sender, EventArgs e)
+        {
+            if (neuspjelaFiskalizacijaPostoji)
+            {
+                //Koji je danasnji datum i vrijeme?
+                danasnjiDatum = DateTime.Now;
+                var preostaloVrijemeFiskalizacije = (datumZadnjeMoguceFiskalizacije - danasnjiDatum).TotalHours;
+                labelPostojeNeuspjeleFiskalizacije.Visible = true;
+                labelPreostaloVrijeme.Visible = true;
+                labelHitnoNazoviteCodeIt.Visible = true;
+                labelPreostaloVrijeme.Text = "Preostalo vrijeme: " + preostaloVrijemeFiskalizacije.ToString("#0.00h");
+                //Postavi labele na visible
+            }
+            else
+            {
+                //Postavi labele na non-visible
+                labelPostojeNeuspjeleFiskalizacije.Visible = false;
+                labelPreostaloVrijeme.Visible = false;
+                labelHitnoNazoviteCodeIt.Visible = false;
+            }
+        }
+
+        //Ako postoji neuspjela fiskalizacija gleda se svakih 10 min
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            ProvjeriPostojiLiNeuspjelaFiskalizacija();
         }
 
         private void txtBrojDana_TextChanged(object sender, EventArgs e)
@@ -580,9 +693,6 @@ namespace PCPOS
             PieStart(Convert.ToInt16(txtBrojDana.Text));
         }
 
-        private void timer3_Tick(object sender, EventArgs e)
-        {
-        }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -822,5 +932,6 @@ namespace PCPOS
             form.Dock = DockStyle.Fill;
             form.Show();
         }
+
     }
 }

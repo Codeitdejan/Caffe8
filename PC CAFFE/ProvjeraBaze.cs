@@ -966,7 +966,7 @@ where id = {1};", rb, id);
             }
 
             if (DTremote.Select("table_name='grupa' AND column_name='printer3'").Length == 0)
-            {
+            {  
                 sql = "ALTER TABLE grupa ADD COLUMN printer3 INT DEFAULT 0;";
                 classSQL.insert(sql);
             }

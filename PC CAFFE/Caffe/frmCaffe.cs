@@ -76,9 +76,12 @@ namespace PCPOS.Caffe
         private bool dodajDjelatnikaNaStavkuRacuna = false;
         private bool dodajOsobuNaRacunAutomatski = false;
 
-        private bool neuspjelaFiskalizacijaPostoji;
-        DateTime DatumVrijemePrveNeuspjeleFiskalizacije;
-        DateTime DatumVrijemePreostaloVrijemeZaFiskalizaciju;
+        public static bool neuspjelaFiskalizacijaPostoji;
+        DateTime datumPrveNeuspjeleFiskalizacije;
+        DateTime datumZadnjeMoguceFiskalizacije;
+        DateTime datumPrvogRacunaSGreskom;
+        DateTime datumZadnjeMoguceFiskalizacijeRacunaSGreskom;
+        DateTime danasnjiDatum;
         private bool zmirkaj = false;
 
         private int polindex = -1;
@@ -108,6 +111,14 @@ namespace PCPOS.Caffe
             posaljiNarudzbeNaStol = false;
             zmirkaj = false;
             ProvjeriNeuspjeleFiskalizacije();
+
+
+            if (neuspjelaFiskalizacijaPostoji)
+            {
+                danasnjiDatum = DateTime.Now;
+                var preostaloVrijemeFiskalizacije = (datumZadnjeMoguceFiskalizacije - danasnjiDatum).TotalHours;
+                labelPostojeNeuspjeleFiskalizacije.Text = "POSTOJE NEUSPJELE FISKALIZACIJE! (PREOSTALO: " + preostaloVrijemeFiskalizacije.ToString("#0.00") + " SATI)";
+            }
 
             if (Class.Postavke.is_beauty)
             {
@@ -201,6 +212,7 @@ namespace PCPOS.Caffe
             popust_na_cijeli_racun = 0;
             timer1.Start();
             timer2.Start();
+            timer3.Start();
 
             DataGridViewRow row = dgw.RowTemplate;
             row.Height = 35;
@@ -384,19 +396,56 @@ namespace PCPOS.Caffe
         {
             string sql = "SELECT * FROM neuspjela_fiskalizacija";
             DataTable DTNeuspjeleFiskalizacije = classSQL.select(sql, "neuspjela_fiskalizacija").Tables[0];
-            if (DTNeuspjeleFiskalizacije.Rows.Count > 0)
+            string broj_rac = "";
+            string query = @"SELECT
+                            racuni.broj_racuna,
+                            racuni.datum_racuna,
+                            ducan.ime_ducana,
+                            racuni.id_ducan,
+                            blagajna.ime_blagajne,
+                            racuni.nacin_placanja,
+                            racuni.id_blagajnik,
+                            racuni.id_kasa,
+                            racuni.godina,
+                            SUM(
+                            CAST(mpc AS NUMERIC)*
+                            CAST(REPLACE(kolicina,',','.') AS NUMERIC)
+                            ) AS ukupno
+                            FROM racun_stavke
+                            LEFT JOIN racuni ON racuni.broj_racuna=racun_stavke.broj_racuna AND racuni.godina=racun_stavke.godina AND racuni.id_ducan=racun_stavke.id_ducan AND racuni.id_kasa=racun_stavke.id_blagajna
+                            LEFT JOIN ducan ON ducan.id_ducan=racuni.id_ducan
+                            LEFT JOIN blagajna ON blagajna.id_blagajna=racuni.id_kasa
+                            WHERE ((jir='' AND zik='') OR (jir IS NULL AND zik IS NULL)) " + broj_rac + @" AND racun_stavke.id_ducan='" + Util.Korisno.idDucan + @"' AND racun_stavke.id_blagajna='" + Util.Korisno.idKasa + @"'
+                            GROUP BY racuni.broj_racuna,racuni.godina,racuni.datum_racuna,ducan.ime_ducana,blagajna.ime_blagajne,
+                            racuni.id_blagajnik,racuni.nacin_placanja,racuni.id_ducan,racuni.id_kasa,racuni.godina
+                            ORDER BY racuni.datum_racuna ASC;";
+            DataTable DTRacuniSGreskom = classSQL.select(query, "racuni").Tables[0];
+
+
+            if (DTNeuspjeleFiskalizacije.Rows.Count > 0 || DTRacuniSGreskom.Rows.Count > 0)
             {
                 neuspjelaFiskalizacijaPostoji = true;
-                //UVIJEK UZIMAMO PRVI RED!
-                string DatumVrijemeIzBaze = DTNeuspjeleFiskalizacije.Rows[0]["date"].ToString();
-                string[] DV = DatumVrijemeIzBaze.Split(' ');
-                string[] Datum = DV[0].Split('.');
-                string[] Time = DV[1].Split(':');
-                DatumVrijemePrveNeuspjeleFiskalizacije = new DateTime(
-                        Int32.Parse(Datum[2]), Int32.Parse(Datum[1]), Int32.Parse(Datum[0]),
-                        Int32.Parse(Time[0]), Int32.Parse(Time[1]), Int32.Parse(Time[2])
-                    );
-                DatumVrijemePreostaloVrijemeZaFiskalizaciju = DatumVrijemePrveNeuspjeleFiskalizacije.AddDays(2);
+                datumPrveNeuspjeleFiskalizacije = DateTime.MaxValue;
+                datumPrvogRacunaSGreskom = DateTime.MaxValue;
+                datumZadnjeMoguceFiskalizacije = DateTime.MaxValue;
+                datumZadnjeMoguceFiskalizacijeRacunaSGreskom = DateTime.MaxValue;
+
+                if (DTNeuspjeleFiskalizacije.Rows.Count > 0)
+                {
+                    datumPrveNeuspjeleFiskalizacije = Convert.ToDateTime(DTNeuspjeleFiskalizacije.Rows[0]["date"].ToString());
+                    datumZadnjeMoguceFiskalizacije = datumPrveNeuspjeleFiskalizacije.AddDays(2);
+                }
+
+                if (DTRacuniSGreskom.Rows.Count > 0)
+                {
+                    datumPrvogRacunaSGreskom = Convert.ToDateTime(DTRacuniSGreskom.Rows[0]["datum_racuna"].ToString());
+                    datumZadnjeMoguceFiskalizacijeRacunaSGreskom = datumPrvogRacunaSGreskom.AddDays(2);
+                }
+
+                if (datumZadnjeMoguceFiskalizacijeRacunaSGreskom.CompareTo(datumZadnjeMoguceFiskalizacije) == -1)
+                    datumZadnjeMoguceFiskalizacije = datumZadnjeMoguceFiskalizacijeRacunaSGreskom;
+
+                   MessageBox.Show(datumZadnjeMoguceFiskalizacije.ToString());
             }
             else
             {
@@ -2038,16 +2087,6 @@ sql);
                 try
                 {
                     DataTable DTfiltered = null;
-                    /*if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran")
-                    {
-                        var rowSources = DTsend.Select("id_podgrupa <> 1");
-                        if (rowSources.Length > 0)
-                            DTfiltered = rowSources.CopyToDataTable();
-                    }*/
-
-                    /*Properties.Settings.Default.prvi = chbPrvi.Checked;
-                    Properties.Settings.Default.drugi = chbDrugi.Checked;
-                    Properties.Settings.Default.treci = chbTreci.Checked;*/
                     if (DTpostavkePrinter.Rows[0]["posPrinterBool"].ToString() != "0")
                     {
                         PosPrint.classPosPrintCaffe.PrintReceipt(DTfiltered ?? DTsend, idOdabraniZaposlenikNaplate.ToString(), brRac + "/" + DateTime.Now.Year.ToString(), sifraPartnera, barcode, brRac, nacin_placanja, "", karticaIznosZaOduzeti, Convert.ToDecimal((((decimal)ukupnoBezRabata - karticaIznosZaOduzeti) / (decimal)ukupnoBezRabata)), vraceniIznos);
@@ -2717,33 +2756,39 @@ remote);
 
             startTimerKartica(true, true, true);
         }
+        //Vrijeme i zmirkanje ak postoje neuspjele fiskalizacije
         private void timer1_Tick(object sender, EventArgs e)
         {
             lblSat.Text = DateTime.Now.ToString();
 
             if (neuspjelaFiskalizacijaPostoji)
             {
-                //labelPostojeNeuspjeleFiskalizacije.Visible = zmirkaj;
-                //zmirkaj = !zmirkaj;
+                labelPostojeNeuspjeleFiskalizacije.Visible = zmirkaj;
+                zmirkaj = !zmirkaj;
             }
         }
 
-
+        //Ova funkcija prikazuje koliko sati je preostalo do fiskalizacije
+        //Javlja se svakih 10 sec
         private void timer2_Tick(object sender, EventArgs e)
         {
-            ProvjeriNeuspjeleFiskalizacije(); // Svaki put kad timer 2 ticka, provjeri dal mozda postoji neuspjela fiskalizacija -> 
-                                            // Timer 2 postavljen na 60000 MS -> 1 Minuta. Svaku minutu provjeravamo dal ima neuspjelih fiskalizacija ili ne.
             if (neuspjelaFiskalizacijaPostoji)
             {
                 DateTime DatumVrijemeSada = DateTime.Now;
-                var hours = (DatumVrijemePreostaloVrijemeZaFiskalizaciju - DatumVrijemeSada).TotalHours;
-               // labelPostojeNeuspjeleFiskalizacije.Visible = true;
+                var hours = (datumZadnjeMoguceFiskalizacije - DatumVrijemeSada).TotalHours;
+                labelPostojeNeuspjeleFiskalizacije.Visible = true;
                 labelPostojeNeuspjeleFiskalizacije.Text = "POSTOJE NEUSPJELE FISKALIZACIJE! (PREOSTALO: " + hours.ToString("#0.00") + " SATI)";
             }
             else
             {
-                //labelPostojeNeuspjeleFiskalizacije.Visible = false;
+                labelPostojeNeuspjeleFiskalizacije.Visible = false;
             }
+        }
+
+        //Svakih 10 min provjeri se ako postoji neuspjela fiskalizacija ili racun s greskom
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            ProvjeriNeuspjeleFiskalizacije();
         }
 
         private void btnPredjela_Click(object sender, EventArgs e)
@@ -3608,5 +3653,6 @@ remote);
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }
+
     }
 }
