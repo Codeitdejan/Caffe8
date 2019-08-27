@@ -51,7 +51,6 @@ namespace PCPOS
             Thread th = new Thread(UpdateProgressBar);
             th.Start();
 
-           // ObrisiDirektorijAkoPostoji();
             StvoriDirektorijAkoNePostoji();
             ProvjeriIzlazneListe(); // Fale izdatnice, otpis robe i usklada robe - Dejan: "Jos nije napravljeno."
             ProvjeriPromet();
@@ -81,12 +80,12 @@ namespace PCPOS
                 progressBar1.Value = currentProgressBarValue;
             }
 
-            if (currentProgressBarValue== maximumProgressBarValue)
+            if (currentProgressBarValue == maximumProgressBarValue)
             {
                 progressBar1.Value = maximumProgressBarValue;
             }
         }
- 
+
         /// <summary>
         /// Ova funkcija sluzi za brojanje koliko je check boxeva checkano.
         /// </summary>
@@ -111,26 +110,15 @@ namespace PCPOS
             return count;
         }
 
-
         /// <summary>
-        /// Ova metoda sluzi kako bi se obrisao direktorij Dokumenti ukoliko on postoji.
-        /// Time pridobivamo da se stari dokumenti koji su se nalazili u tom folderu obrišu.
-        /// Nakon toga slijedi stvaranje novog direktorija s novim dokumentima.
+        /// Ova funkcija služi za generiranje odabranih dokumenata
         /// </summary>
-        private void ObrisiDirektorijAkoPostoji()
+        private void BrisanjeGeneriranihDokumenata()
         {
-            string Path = AppDomain.CurrentDomain.BaseDirectory + "Dokumenti";
-            if (Directory.Exists(Path))
+            DirectoryInfo di = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "Dokumenti");
+            foreach (FileInfo file in di.GetFiles())
             {
-                //Brise pdfove unutra
-                DirectoryInfo di = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "Dokumenti"); 
-                foreach (FileInfo file in di.GetFiles())
-                {
-                    file.Delete();
-                }
-                
-                //Brise direktorij
-                Directory.Delete(Path);
+                file.Delete();
             }
         }
 
@@ -293,9 +281,15 @@ namespace PCPOS
                 //Send E-Mail
                 SmtpServer.Send(mail);
                 mail.Attachments.Dispose(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                //Kopiranje dokumenata koji su poslani u posebnu mapu npr Slanje270819.072370
+                StvoriPoslaneDokumente();
+
+                //Brisanje generiranih dokumenata
+                BrisanjeGeneriranihDokumenata();
+
+                progressBar1.Value = maximumProgressBarValue;
                 MessageBox.Show("Odabrani dokumenti poslani su knjigovodstvu.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
             }
             catch (Exception ex)
             {
@@ -330,7 +324,41 @@ namespace PCPOS
             foreach (FileInfo file in Files)
             {
                 mail.Attachments.Add(new Attachment(AppDomain.CurrentDomain.BaseDirectory + $@"Dokumenti\{file.Name}"));
-               // file.Delete();
+            }
+        }
+
+        /// <summary>
+        /// Ova metoda sluzi kako bi se generirali datum i vrijeme te napravila putanja iz
+        /// source foldera u destination folder i pozvala funkcija za kopiranje fileova
+        /// </summary>
+        private void StvoriPoslaneDokumente()
+        {
+            //Ako folder poslani dokumenti za sad ne postoji
+            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "PoslaniDokumenti"))
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "PoslaniDokumenti");
+
+            DateTime trenutniDatumIVrijeme = DateTime.Now;
+            string fileName = trenutniDatumIVrijeme.ToString("ddMMyy.HHmmss");
+            string sourceFolder = AppDomain.CurrentDomain.BaseDirectory + "Dokumenti";
+            string destinationFolder = AppDomain.CurrentDomain.BaseDirectory + "PoslaniDokumenti\\" + fileName;
+
+            //Copy Folder
+            CopyFolder(sourceFolder, destinationFolder);
+        }
+
+        /// <summary>
+        /// Ova metoda sluzi za kopiranje filea iz sourceFoldera u destinationFolder
+        /// </summary>
+        public void CopyFolder(string sourceFolder, string destFolder)
+        {
+            if (!Directory.Exists(destFolder))
+                Directory.CreateDirectory(destFolder);
+            string[] files = Directory.GetFiles(sourceFolder);
+            foreach (string file in files)
+            {
+                string name = Path.GetFileName(file);
+                string dest = Path.Combine(destFolder, name);
+                File.Copy(file, dest);
             }
         }
     }
