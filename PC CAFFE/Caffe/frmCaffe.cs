@@ -1453,7 +1453,7 @@ namespace PCPOS.Caffe
 
             switch (Properties.Settings.Default.id_dopustenje)
             {
-                case 1:
+                case 1: // Izbacen
                     this.Close();
                     break;
                 case 2:

@@ -203,6 +203,9 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                 lblDostava.Text = "";
             }
 
+            DataGridViewButtonColumn c = (DataGridViewButtonColumn)dgw.Columns["naplatiButton"];
+            c.FlatStyle = FlatStyle.Popup;
+
             decimal u = 0;
             for (int i = 0; i < DT.Rows.Count; i++)
             {
@@ -225,6 +228,8 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                 dgw.Rows[index].Cells["polapola"].Value = DT.Rows[i]["pol"].ToString();
                 dgw.Rows[index].Cells["rabat"].Value = DT.Rows[i]["rabat"].ToString();
                 dgw.Rows[index].Cells["id_skladiste"].Value = DT.Rows[i]["id_skladiste"].ToString();
+                dgw.Rows[index].Cells["naplatiButton"].Style.BackColor = Color.ForestGreen;
+                dgw.Rows[index].Cells["naplatiButton"].Style.SelectionBackColor = Color.Empty;
 
                 /* dgw.Rows.Add(DT.Rows[i]["broj_narudzbe"].ToString(),
                      DT.Rows[i]["naziv"].ToString(),
@@ -248,6 +253,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
             }
 
             PaintRows(dgw);
+            dgw.ClearSelection();
         }
 
         private void PaintRows(DataGridView dg)
@@ -264,18 +270,37 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
         private void dgw_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int i = e.RowIndex;
+            /*  if (i >= 0)
+              {
+                  if (e.ColumnIndex == 4)
+                  {
+                      if (dgw.Rows[i].Cells["chb_naplati"].FormattedValue.ToString() == "False")
+                      {
+                          dgw.Rows[i].Cells["chb_naplati"].Value = true;
+                      }
+                      else
+                      {
+                          dgw.Rows[i].Cells["chb_naplati"].Value = false;
+                      }
+                  }
+              }
+              */
             if (i >= 0)
             {
-                if (e.ColumnIndex == 4)
+                if (e.ColumnIndex == 18)
                 {
-                    if (dgw.Rows[i].Cells["chb_naplati"].FormattedValue.ToString() == "False")
+                    if (dgw.Rows[i].Cells["naplatiButton"].Style.BackColor == Color.ForestGreen)
                     {
-                        dgw.Rows[i].Cells["chb_naplati"].Value = true;
+                        dgw.Rows[i].Cells["naplatiButton"].Style.BackColor = Color.DarkRed;
+                        dgw.Rows[i].Cells["chb_naplati"].Value = false;
                     }
                     else
                     {
-                        dgw.Rows[i].Cells["chb_naplati"].Value = false;
+                        dgw.Rows[i].Cells["naplatiButton"].Style.BackColor = Color.ForestGreen;
+                        dgw.Rows[i].Cells["chb_naplati"].Value = true;
                     }
+
+                    dgw.ClearSelection();
                 }
             }
         }
@@ -512,7 +537,8 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                     row["id_podgrupa"] = dg(i, "id_podgrupa");
                     DTsend.Rows.Add(row);
 
-                    provjera_sql(classSQL.delete("INSERT INTO na_stol_naplaceno SELECT * FROM na_stol WHERE na_stol.id_stol='" + _odabraniStol + "' AND  na_stol.broj_narudzbe='" + dg(i, "runda") + "' AND  na_stol.sifra='" + sifra + "' and  na_stol.dod = '" + dg(i, "dod") + "'"));
+                    string sqlhehe= "INSERT INTO na_stol_naplaceno SELECT * FROM na_stol WHERE na_stol.id_stol='" + _odabraniStol + "' AND  na_stol.broj_narudzbe='" + dg(i, "runda") + "' AND  na_stol.sifra='" + sifra + "' and  na_stol.dod = '" + dg(i, "dod") + "'";
+                    provjera_sql(classSQL.delete(sqlhehe));
                     provjera_sql(classSQL.delete("DELETE FROM na_stol WHERE id_stol='" + _odabraniStol + "' AND  broj_narudzbe='" + dg(i, "runda") + "' AND  sifra='" + sifra + "' and  dod = '" + dg(i, "dod") + "'"));
 
                     if (sifra.Length > 4)
@@ -570,7 +596,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Dali ste sigurni da želite obrisati cijeli stol?", "Brisanje sa cijelog stola!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Dali ste sigurni da želite obrisati CRVENO označene stavke?", "Brisanje sa cijelog stola!", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 for (int i = 0; i < dgw.Rows.Count; i++)
                 {
@@ -908,7 +934,7 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
 
                 PostaviBrojNarudzbe();
 
-                frmCaffe.posaljiNarudzbeNaStol = true; 
+                frmCaffe.posaljiNarudzbeNaStol = true;
                 if (DTpostavkePrinter.Rows[0]["windows_printer_sank"].ToString() != "Nije instaliran")
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter1(DTsend);
 
@@ -917,8 +943,8 @@ where id= (select id_adresa_dostave from na_stol where id_stol = '" + _odabraniS
                     PosPrint.classPosPrintKuhinja.PrintOnPrinter2(DTsend);
                 testVariable = false;
 
-                 if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
-                     PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
+                if (DTpostavkePrinter.Rows[0]["windows_printer_name3"].ToString() != "Nije instaliran")
+                    PosPrint.classPosPrintKuhinja.PrintOnPrinter3(DTsend);
                 frmCaffe.posaljiNarudzbeNaStol = false;
 
                 //Ako postoji uopce koja grupa da je ozancena za 4. printer u postavkama POS opreme

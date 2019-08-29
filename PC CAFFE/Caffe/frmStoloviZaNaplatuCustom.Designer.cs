@@ -29,9 +29,27 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgw = new System.Windows.Forms.DataGridView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnAdresa = new System.Windows.Forms.Button();
+            this.btnDodajPopust = new System.Windows.Forms.Button();
+            this.btnIspisNarudzbe = new System.Windows.Forms.Button();
+            this.btnPredRacun = new System.Windows.Forms.Button();
+            this.btnOtpremnica = new System.Windows.Forms.Button();
+            this.btnUdsGame = new System.Windows.Forms.Button();
+            this.btnKoristiUds = new System.Windows.Forms.Button();
+            this.btnIspisiSveNarudzbe = new System.Windows.Forms.Button();
+            this.panelStolovi = new System.Windows.Forms.Panel();
+            this.btnDellAll = new System.Windows.Forms.Button();
+            this.btnPosaljiUKuhinju = new System.Windows.Forms.Button();
+            this.btnObrisi = new System.Windows.Forms.Button();
+            this.btnNaplati = new System.Windows.Forms.Button();
+            this.btnESC = new System.Windows.Forms.Button();
+            this.lblDostava = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.runda = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.naziv = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.kolicina = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,24 +68,7 @@
             this.dod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.polapola = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rabat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnAdresa = new System.Windows.Forms.Button();
-            this.btnDodajPopust = new System.Windows.Forms.Button();
-            this.btnIspisNarudzbe = new System.Windows.Forms.Button();
-            this.btnPredRacun = new System.Windows.Forms.Button();
-            this.btnIspisiSveNarudzbe = new System.Windows.Forms.Button();
-            this.btnOtpremnica = new System.Windows.Forms.Button();
-            this.btnUdsGame = new System.Windows.Forms.Button();
-            this.btnKoristiUds = new System.Windows.Forms.Button();
-            this.panelStolovi = new System.Windows.Forms.Panel();
-            this.btnDellAll = new System.Windows.Forms.Button();
-            this.btnPosaljiUKuhinju = new System.Windows.Forms.Button();
-            this.btnObrisi = new System.Windows.Forms.Button();
-            this.btnNaplati = new System.Windows.Forms.Button();
-            this.btnESC = new System.Windows.Forms.Button();
-            this.lblDostava = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.naplatiButton = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgw)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,15 +102,16 @@
             this.id_zaposlenik,
             this.dod,
             this.polapola,
-            this.rabat});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(170)))), ((int)(((byte)(197)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgw.DefaultCellStyle = dataGridViewCellStyle4;
+            this.rabat,
+            this.naplatiButton});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(170)))), ((int)(((byte)(197)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgw.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgw.EnableHeadersVisualStyles = false;
             this.dgw.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.dgw.Location = new System.Drawing.Point(695, 71);
@@ -122,145 +124,6 @@
             this.dgw.TabIndex = 136;
             this.dgw.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgw_CellClick);
             this.dgw.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AllKeyDown);
-            // 
-            // runda
-            // 
-            this.runda.FillWeight = 70F;
-            this.runda.HeaderText = "Run";
-            this.runda.Name = "runda";
-            this.runda.ReadOnly = true;
-            this.runda.ToolTipText = "Runda";
-            this.runda.Width = 40;
-            // 
-            // naziv
-            // 
-            this.naziv.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.naziv.HeaderText = "Naziv";
-            this.naziv.Name = "naziv";
-            this.naziv.ReadOnly = true;
-            // 
-            // kolicina
-            // 
-            this.kolicina.HeaderText = "Kol";
-            this.kolicina.Name = "kolicina";
-            this.kolicina.ReadOnly = true;
-            this.kolicina.Width = 50;
-            // 
-            // cijena
-            // 
-            this.cijena.FillWeight = 90F;
-            this.cijena.HeaderText = "Cijena";
-            this.cijena.Name = "cijena";
-            this.cijena.ReadOnly = true;
-            this.cijena.Width = 60;
-            // 
-            // chb_naplati
-            // 
-            this.chb_naplati.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle3.NullValue = false;
-            this.chb_naplati.DefaultCellStyle = dataGridViewCellStyle3;
-            this.chb_naplati.FillWeight = 10F;
-            this.chb_naplati.HeaderText = "Naplati";
-            this.chb_naplati.Name = "chb_naplati";
-            this.chb_naplati.ReadOnly = true;
-            this.chb_naplati.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.chb_naplati.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.chb_naplati.Width = 60;
-            // 
-            // id_podgrupa
-            // 
-            this.id_podgrupa.HeaderText = "id_podgrupa";
-            this.id_podgrupa.Name = "id_podgrupa";
-            this.id_podgrupa.ReadOnly = true;
-            this.id_podgrupa.Visible = false;
-            // 
-            // sifra
-            // 
-            this.sifra.FillWeight = 30F;
-            this.sifra.HeaderText = "sifra";
-            this.sifra.Name = "sifra";
-            this.sifra.ReadOnly = true;
-            this.sifra.Visible = false;
-            this.sifra.Width = 30;
-            // 
-            // id_skladiste
-            // 
-            this.id_skladiste.HeaderText = "id_skladiste";
-            this.id_skladiste.Name = "id_skladiste";
-            this.id_skladiste.ReadOnly = true;
-            this.id_skladiste.Visible = false;
-            // 
-            // porez
-            // 
-            this.porez.HeaderText = "porez";
-            this.porez.Name = "porez";
-            this.porez.ReadOnly = true;
-            this.porez.Visible = false;
-            // 
-            // porez_potrosnja
-            // 
-            this.porez_potrosnja.HeaderText = "porez_potrosnja";
-            this.porez_potrosnja.Name = "porez_potrosnja";
-            this.porez_potrosnja.ReadOnly = true;
-            this.porez_potrosnja.Visible = false;
-            // 
-            // vpc
-            // 
-            this.vpc.HeaderText = "vpc";
-            this.vpc.Name = "vpc";
-            this.vpc.ReadOnly = true;
-            this.vpc.Visible = false;
-            // 
-            // br
-            // 
-            this.br.HeaderText = "br";
-            this.br.Name = "br";
-            this.br.ReadOnly = true;
-            this.br.Visible = false;
-            // 
-            // jelo
-            // 
-            this.jelo.HeaderText = "jelo";
-            this.jelo.Name = "jelo";
-            this.jelo.ReadOnly = true;
-            this.jelo.Visible = false;
-            // 
-            // skinuto
-            // 
-            this.skinuto.HeaderText = "skinuto";
-            this.skinuto.Name = "skinuto";
-            this.skinuto.ReadOnly = true;
-            this.skinuto.Visible = false;
-            // 
-            // id_zaposlenik
-            // 
-            this.id_zaposlenik.HeaderText = "id_zaposlenik";
-            this.id_zaposlenik.Name = "id_zaposlenik";
-            this.id_zaposlenik.ReadOnly = true;
-            this.id_zaposlenik.Visible = false;
-            // 
-            // dod
-            // 
-            this.dod.HeaderText = "dod";
-            this.dod.Name = "dod";
-            this.dod.ReadOnly = true;
-            this.dod.Visible = false;
-            // 
-            // polapola
-            // 
-            this.polapola.HeaderText = "polapola";
-            this.polapola.Name = "polapola";
-            this.polapola.ReadOnly = true;
-            this.polapola.Visible = false;
-            // 
-            // rabat
-            // 
-            this.rabat.HeaderText = "Rabat";
-            this.rabat.Name = "rabat";
-            this.rabat.ReadOnly = true;
-            this.rabat.Visible = false;
             // 
             // label1
             // 
@@ -369,28 +232,6 @@
             this.btnPredRacun.Click += new System.EventHandler(this.btnPredRacun_Click);
             this.btnPredRacun.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AllKeyDown);
             // 
-            // btnIspisiSveNarudzbe
-            // 
-            this.btnIspisiSveNarudzbe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIspisiSveNarudzbe.BackColor = System.Drawing.Color.White;
-            this.btnIspisiSveNarudzbe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnIspisiSveNarudzbe.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnIspisiSveNarudzbe.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(53)))), ((int)(((byte)(79)))));
-            this.btnIspisiSveNarudzbe.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gainsboro;
-            this.btnIspisiSveNarudzbe.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
-            this.btnIspisiSveNarudzbe.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
-            this.btnIspisiSveNarudzbe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIspisiSveNarudzbe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIspisiSveNarudzbe.ForeColor = System.Drawing.Color.Black;
-            this.btnIspisiSveNarudzbe.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.btnIspisiSveNarudzbe.Location = new System.Drawing.Point(598, 9);
-            this.btnIspisiSveNarudzbe.Name = "btnIspisiSveNarudzbe";
-            this.btnIspisiSveNarudzbe.Size = new System.Drawing.Size(92, 56);
-            this.btnIspisiSveNarudzbe.TabIndex = 147;
-            this.btnIspisiSveNarudzbe.Text = "Ispis SVIH narudžbi";
-            this.btnIspisiSveNarudzbe.UseVisualStyleBackColor = false;
-            this.btnIspisiSveNarudzbe.Click += new System.EventHandler(this.btnSveUKuhinju_Click);
-            // 
             // btnOtpremnica
             // 
             this.btnOtpremnica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -464,6 +305,28 @@
             this.btnKoristiUds.UseVisualStyleBackColor = false;
             this.btnKoristiUds.Visible = false;
             this.btnKoristiUds.Click += new System.EventHandler(this.btnKoristiUds_Click);
+            // 
+            // btnIspisiSveNarudzbe
+            // 
+            this.btnIspisiSveNarudzbe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIspisiSveNarudzbe.BackColor = System.Drawing.Color.White;
+            this.btnIspisiSveNarudzbe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnIspisiSveNarudzbe.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnIspisiSveNarudzbe.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(53)))), ((int)(((byte)(79)))));
+            this.btnIspisiSveNarudzbe.FlatAppearance.CheckedBackColor = System.Drawing.Color.Gainsboro;
+            this.btnIspisiSveNarudzbe.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.btnIspisiSveNarudzbe.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
+            this.btnIspisiSveNarudzbe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIspisiSveNarudzbe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnIspisiSveNarudzbe.ForeColor = System.Drawing.Color.Black;
+            this.btnIspisiSveNarudzbe.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.btnIspisiSveNarudzbe.Location = new System.Drawing.Point(598, 9);
+            this.btnIspisiSveNarudzbe.Name = "btnIspisiSveNarudzbe";
+            this.btnIspisiSveNarudzbe.Size = new System.Drawing.Size(92, 56);
+            this.btnIspisiSveNarudzbe.TabIndex = 147;
+            this.btnIspisiSveNarudzbe.Text = "Ispis SVIH narudžbi";
+            this.btnIspisiSveNarudzbe.UseVisualStyleBackColor = false;
+            this.btnIspisiSveNarudzbe.Click += new System.EventHandler(this.btnSveUKuhinju_Click);
             // 
             // panelStolovi
             // 
@@ -622,6 +485,154 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // runda
+            // 
+            this.runda.FillWeight = 70F;
+            this.runda.HeaderText = "Run";
+            this.runda.Name = "runda";
+            this.runda.ReadOnly = true;
+            this.runda.ToolTipText = "Runda";
+            this.runda.Width = 40;
+            // 
+            // naziv
+            // 
+            this.naziv.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.naziv.HeaderText = "Naziv";
+            this.naziv.Name = "naziv";
+            this.naziv.ReadOnly = true;
+            // 
+            // kolicina
+            // 
+            this.kolicina.HeaderText = "Kol";
+            this.kolicina.Name = "kolicina";
+            this.kolicina.ReadOnly = true;
+            this.kolicina.Width = 50;
+            // 
+            // cijena
+            // 
+            this.cijena.FillWeight = 90F;
+            this.cijena.HeaderText = "Cijena";
+            this.cijena.Name = "cijena";
+            this.cijena.ReadOnly = true;
+            this.cijena.Width = 60;
+            // 
+            // chb_naplati
+            // 
+            this.chb_naplati.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.NullValue = false;
+            this.chb_naplati.DefaultCellStyle = dataGridViewCellStyle1;
+            this.chb_naplati.FillWeight = 10F;
+            this.chb_naplati.HeaderText = "Naplati";
+            this.chb_naplati.Name = "chb_naplati";
+            this.chb_naplati.ReadOnly = true;
+            this.chb_naplati.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.chb_naplati.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.chb_naplati.Visible = false;
+            this.chb_naplati.Width = 60;
+            // 
+            // id_podgrupa
+            // 
+            this.id_podgrupa.HeaderText = "id_podgrupa";
+            this.id_podgrupa.Name = "id_podgrupa";
+            this.id_podgrupa.ReadOnly = true;
+            this.id_podgrupa.Visible = false;
+            // 
+            // sifra
+            // 
+            this.sifra.FillWeight = 30F;
+            this.sifra.HeaderText = "sifra";
+            this.sifra.Name = "sifra";
+            this.sifra.ReadOnly = true;
+            this.sifra.Visible = false;
+            this.sifra.Width = 30;
+            // 
+            // id_skladiste
+            // 
+            this.id_skladiste.HeaderText = "id_skladiste";
+            this.id_skladiste.Name = "id_skladiste";
+            this.id_skladiste.ReadOnly = true;
+            this.id_skladiste.Visible = false;
+            // 
+            // porez
+            // 
+            this.porez.HeaderText = "porez";
+            this.porez.Name = "porez";
+            this.porez.ReadOnly = true;
+            this.porez.Visible = false;
+            // 
+            // porez_potrosnja
+            // 
+            this.porez_potrosnja.HeaderText = "porez_potrosnja";
+            this.porez_potrosnja.Name = "porez_potrosnja";
+            this.porez_potrosnja.ReadOnly = true;
+            this.porez_potrosnja.Visible = false;
+            // 
+            // vpc
+            // 
+            this.vpc.HeaderText = "vpc";
+            this.vpc.Name = "vpc";
+            this.vpc.ReadOnly = true;
+            this.vpc.Visible = false;
+            // 
+            // br
+            // 
+            this.br.HeaderText = "br";
+            this.br.Name = "br";
+            this.br.ReadOnly = true;
+            this.br.Visible = false;
+            // 
+            // jelo
+            // 
+            this.jelo.HeaderText = "jelo";
+            this.jelo.Name = "jelo";
+            this.jelo.ReadOnly = true;
+            this.jelo.Visible = false;
+            // 
+            // skinuto
+            // 
+            this.skinuto.HeaderText = "skinuto";
+            this.skinuto.Name = "skinuto";
+            this.skinuto.ReadOnly = true;
+            this.skinuto.Visible = false;
+            // 
+            // id_zaposlenik
+            // 
+            this.id_zaposlenik.HeaderText = "id_zaposlenik";
+            this.id_zaposlenik.Name = "id_zaposlenik";
+            this.id_zaposlenik.ReadOnly = true;
+            this.id_zaposlenik.Visible = false;
+            // 
+            // dod
+            // 
+            this.dod.HeaderText = "dod";
+            this.dod.Name = "dod";
+            this.dod.ReadOnly = true;
+            this.dod.Visible = false;
+            // 
+            // polapola
+            // 
+            this.polapola.HeaderText = "polapola";
+            this.polapola.Name = "polapola";
+            this.polapola.ReadOnly = true;
+            this.polapola.Visible = false;
+            // 
+            // rabat
+            // 
+            this.rabat.HeaderText = "Rabat";
+            this.rabat.Name = "rabat";
+            this.rabat.ReadOnly = true;
+            this.rabat.Visible = false;
+            // 
+            // naplatiButton
+            // 
+            this.naplatiButton.FillWeight = 50F;
+            this.naplatiButton.HeaderText = "Naplatiti";
+            this.naplatiButton.Name = "naplatiButton";
+            this.naplatiButton.ReadOnly = true;
+            this.naplatiButton.Width = 50;
+            // 
             // frmStoloviZaNaplatuCustom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -697,5 +708,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dod;
         private System.Windows.Forms.DataGridViewTextBoxColumn polapola;
         private System.Windows.Forms.DataGridViewTextBoxColumn rabat;
+        private System.Windows.Forms.DataGridViewButtonColumn naplatiButton;
     }
 }

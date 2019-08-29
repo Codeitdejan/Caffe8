@@ -266,13 +266,13 @@ namespace PCPOS
                 SmtpServer.Port = 587;
                 SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
                 SmtpServer.Credentials = new System.Net.NetworkCredential("dokumenti.codeit@gmail.com", "Dejan102");
-                //SmtpServer.Credentials = new System.Net.NetworkCredential("prometi@code-it.hr", "Prometi123");
+                //SmtpServer.Credentials = new System.Net.NetworkCredential("prometi@code-it.hr", "Prometi123"); - Ne može preko toga.
                 SmtpServer.EnableSsl = true;
 
                 //E-Mail
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("dokumenti.codeit@gmail.com");
-                //mail.From = new MailAddress("prometi@code-it.hr");
+                //mail.From = new MailAddress("prometi@code-it.hr"); - Ne može preko toga.
                 mail.To.Add(email);
                 mail.Subject = "Dokumenti za knjigovodstvo - " + imetvrtke;
                 mail.Body = $@"Poštovani! U prilogu se nalaze dokumenti potrebni za računovodstvo od datuma {dateTimePickerPocetni.Value.ToString("dd/MM/yyyy")} do datuma {dateTimePickerZavrsni.Value.ToString("dd/MM/yyyy")}.";

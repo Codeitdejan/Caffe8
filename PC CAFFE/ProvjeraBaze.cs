@@ -317,7 +317,7 @@ activationCode nchar(34)
                       pol integer,
                       id_adresa_dostave numeric,
                       rabat numeric,
-                      id serial primary key
+                      id_foreign_key_na_stol int
                       )";
                 classSQL.insert(sql);
             }
