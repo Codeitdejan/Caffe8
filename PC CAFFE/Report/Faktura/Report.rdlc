@@ -1177,8 +1177,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>6.51585cm</Top>
-            <Left>0.59816cm</Left>
+            <Top>9.95244cm</Top>
+            <Left>0.62324cm</Left>
             <Height>0.46771cm</Height>
             <Width>5.84182cm</Width>
             <ZIndex>19</ZIndex>
@@ -1205,8 +1205,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>6.51585cm</Top>
-            <Left>6.61637cm</Left>
+            <Top>9.95244cm</Top>
+            <Left>6.64145cm</Left>
             <Height>0.46771cm</Height>
             <Width>6.09833cm</Width>
             <ZIndex>20</ZIndex>
@@ -1237,8 +1237,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.51585cm</Top>
-            <Left>12.8911cm</Left>
+            <Top>9.95244cm</Top>
+            <Left>12.91618cm</Left>
             <Height>0.46771cm</Height>
             <Width>6.945cm</Width>
             <ZIndex>21</ZIndex>
@@ -1249,8 +1249,8 @@
             </Style>
           </Textbox>
           <Line Name="Line1">
-            <Top>7.08883cm</Top>
-            <Left>0.59816cm</Left>
+            <Top>10.52542cm</Top>
+            <Left>0.62324cm</Left>
             <Height>0cm</Height>
             <Width>19.31321cm</Width>
             <ZIndex>22</ZIndex>
@@ -1261,8 +1261,8 @@
             </Style>
           </Line>
           <Line Name="Line2">
-            <Top>6.44446cm</Top>
-            <Left>0.59816cm</Left>
+            <Top>9.88105cm</Top>
+            <Left>0.62324cm</Left>
             <Height>0cm</Height>
             <Width>19.28813cm</Width>
             <ZIndex>23</ZIndex>
@@ -1307,7 +1307,7 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>9.65412cm</Top>
-        <Height>7.2975cm</Height>
+        <Height>10.66653cm</Height>
         <Width>20.78381cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2022,7 +2022,7 @@ IIf(First(Fields!datum.Value, "DSKaktura").ToString()&lt;CDate("1970/1/1"),"","V
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>17.09273cm</Height>
+    <Height>20.35593cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
@@ -2033,7 +2033,7 @@ IIf(First(Fields!datum.Value, "DSKaktura").ToString()&lt;CDate("1970/1/1"),"","V
   <Width>20.78381cm</Width>
   <Page>
     <PageFooter>
-      <Height>0.99215cm</Height>
+      <Height>1.12444cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>

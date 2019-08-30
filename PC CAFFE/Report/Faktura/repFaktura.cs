@@ -223,6 +223,7 @@ namespace PCPOS.Report.Faktura
                 " LEFT JOIN zaposlenici ON zaposlenici.id_zaposlenik=racuni.id_blagajnik WHERE racuni.broj_racuna='" + broj_dokumenta + "'  AND racuni.id_ducan='" + (id_poslovnica == null ? Util.Korisno.idDucan : id_poslovnica) + "' AND racuni.id_kasa='" + (id_kasa == null ? Util.Korisno.idKasa : id_kasa) + "';" +
                 "";
 
+
             if (classSQL.remoteConnectionString == "")
             {
                 classSQL.CeAdatpter(sql).Fill(dSFaktura, "DTRfaktura");
@@ -458,26 +459,6 @@ namespace PCPOS.Report.Faktura
                 dSFaktura.Tables[0].Rows[0]["kupac_grad"] = grad_kupac;
             }
 
-            /*
-              string id_kupac = "";
-            if (dSFaktura.Tables[0].Rows.Count > 0)
-            {
-                id_kupac = dSFaktura.Tables[0].Rows[0]["id_kupac_grad"].ToString();
-            }
-
-            if (id_kupac.Length == 0)
-                id_kupac = "0";
-
-            string grad_kupac = "";
-            DataTable DTgrad_kupac = classSQL.select("SELECT grad,posta FROM grad WHERE id_grad = '" + id_kupac + "'", "grad").Tables[0];
-            if (DTgrad_kupac.Rows.Count != 0)
-            {
-                grad_kupac = DTgrad_kupac.Rows[0]["posta"].ToString().Trim() + " " + DTgrad_kupac.Rows[0]["grad"].ToString();
-                dSFaktura.Tables[0].Rows[0]["kupac_grad"] = grad_kupac;
-            }
-
-             */
-
             string poslovnica_grad = "";
             DataTable DTposlovnica_grad = classSQL.select("SELECT grad,posta FROM grad WHERE id_grad = '" + Class.PodaciTvrtka.gradPoslovnicaId + "'", "grad").Tables[0];
             if (DTposlovnica_grad.Rows.Count != 0)
@@ -485,26 +466,6 @@ namespace PCPOS.Report.Faktura
                 poslovnica_grad = DTposlovnica_grad.Rows[0]["posta"].ToString().Trim() + " " + DTposlovnica_grad.Rows[0]["grad"].ToString();
             }
 
-            //string sql1 = "SELECT " +
-            //    " podaci_tvrtka.ime_tvrtke," +
-            //    " podaci_tvrtka.skraceno_ime," +
-            //    " podaci_tvrtka.oib," +
-            //    " podaci_tvrtka.tel," +
-            //    " podaci_tvrtka.fax," +
-            //    " podaci_tvrtka.mob," +
-            //    " podaci_tvrtka.iban," +
-            //    " podaci_tvrtka.adresa," +
-            //    " podaci_tvrtka.vl," +
-            //    " '" + grad_kupac + "' AS grad_kupac," +
-            //    " podaci_tvrtka.poslovnica_adresa," +
-            //    "  '" + poslovnica_grad + "' as poslovnica_grad," +
-            //    " podaci_tvrtka.email," +
-            //    " podaci_tvrtka.naziv_fakture AS naziv_fakture," +
-            //    " podaci_tvrtka.text_bottom," +
-            //    " grad.grad + '' + grad.posta AS grad" +
-            //    " FROM podaci_tvrtka" +
-            //    " LEFT JOIN grad ON grad.id_grad=podaci_tvrtka.id_grad" +
-            //    "";
 
             string sql1 = "SELECT " +
                  " podaci_tvrtka.ime_tvrtke," +
@@ -537,6 +498,55 @@ namespace PCPOS.Report.Faktura
                 classSQL.CeAdatpter(sql1).Fill(dSRpodaciTvrtke, "DTRpodaciTvrtke");
             }
             this.reportViewer1.RefreshReport();
+
+            //----------------------------------------------------BarCode------------------------------------------
+            string barCodeString = "HRVHUB30" + "\n";
+            barCodeString += "HRK" + "\n";
+            barCodeString += BarCodeIznos(Double.Parse(dSFaktura.DTRfaktura.Rows[0]["ukupno"].ToString()).ToString("#0.00"))+ "\n";
+            barCodeString += dSFaktura.DTRfaktura.Rows[0]["kupac_tvrtka"].ToString() + "\n";
+            barCodeString += dSFaktura.DTRfaktura.Rows[0]["kupac_adresa"].ToString() + "\n";
+            barCodeString += dSFaktura.DTRfaktura.Rows[0]["kupac_grad"].ToString() + "\n";
+            barCodeString += dSRpodaciTvrtke.DTRpodaciTvrtke.Rows[0]["ime_tvrtke"].ToString() + "\n";
+            barCodeString += dSRpodaciTvrtke.DTRpodaciTvrtke.Rows[0]["adresa"].ToString() + "\n";
+            barCodeString += dSRpodaciTvrtke.DTRpodaciTvrtke.Rows[0]["grad"].ToString() + "\n";
+            barCodeString += dSRpodaciTvrtke.DTRpodaciTvrtke.Rows[0]["iban"].ToString() + "\n";
+            barCodeString += "MODEL" + "\n"; // Pitati dejana kaj tu?
+            barCodeString += "POZIV NA BROJ" + "\n"; // Pitati dejana kaj tu?
+            barCodeString += "SIFRA NAMJENE" + "\n"; // Pitati dejana kaj tu?
+            barCodeString += "Uplata";
+
+            MessageBox.Show(barCodeString);
+        }
+
+        //Iznos mora biti u skladu s propisima 
+        //Puni se s desna na lijevo, ima 15 znakova, lijevo se nadopunjuju 0
+        private string BarCodeIznos(string iznos)
+        {
+            string iznosPremaPropisu = ""; // Ovo je varijabla koja će u konačnici imati oblik kakav treba biti kod skeniranja
+            string praviIznos = iznos; 
+            int kolikoZnakovaNisuNule = PrebrojiOnoStoNijeNulaIliZarez(praviIznos); //Maknemo , i . iz pravog iznosa
+            int kolikoNula = 15 - kolikoZnakovaNisuNule;
+            //U string upisujemo 15-kolikoZnakovaNisuNule nula.
+            for (int i = 0; i < kolikoNula; i++)
+                iznosPremaPropisu += "0";
+            //U string upisujemo iznos bez točke i zareza -> TAKO JE PROPISANO ZAKONOM da mora biti kod skeniranja
+            for(int i = 0; i < praviIznos.Length; i++)
+            {
+                if (praviIznos[i] != ',' && praviIznos[i] != '.')
+                    iznosPremaPropisu += praviIznos[i];
+            }
+            return iznosPremaPropisu;
+        }
+
+        private int PrebrojiOnoStoNijeNulaIliZarez(string iznos)
+        {
+            int brojZnakova = 0;
+            for(int i = 0; i < iznos.Length; i++)
+            {
+                if (iznos[i] != '.' && iznos[i] != ',')
+                    brojZnakova++;
+            }
+            return brojZnakova;
         }
 
         //DataRow RowPdv;
@@ -563,19 +573,6 @@ namespace PCPOS.Report.Faktura
         {
             PCPOS.classNumberToLetter broj_u_text = new PCPOS.classNumberToLetter();
 
-            //MessageBox.Show(broj_slovima.ToLower());
-
-            //string sql2 = "SELECT " +
-            //    " ponude_stavke.kolicina," +
-            //    " ponude_stavke.vpc," +
-            //    " ponude_stavke.porez," +
-            //    " ponude_stavke.broj_ponude," +
-            //    " ponude_stavke.rabat," +
-            //    " ponude_stavke.sifra," +
-            //    " roba.naziv as naziv," +
-            //    " ponude_stavke.id_skladiste AS skladiste" +
-            //    " FROM ponude_stavke" +
-            //    " LEFT JOIN roba ON roba.sifra=ponude_stavke.sifra WHERE ponude_stavke.broj_ponude='" + broj + "'";
             string sql2 = "SELECT " +
                " replace(ponude_stavke.kolicina, ',','.')::numeric as kolicina," +
                " ponude_stavke.vpc," +
@@ -601,40 +598,6 @@ namespace PCPOS.Report.Faktura
             {
                 classSQL.NpgAdatpter(sql2).Fill(dSRfakturaStavke, "DTfakturaStavke");
             }
-
-            //double vpc_stavka = 0;
-            //double kol_stavka = 0;
-            //double pdv;
-            //double rabat;
-            //double mpc_stavka;
-            //double rabat_stavka = 0;
-            //double pdv_stavka = 0;
-            //double osnovica_stavka = 0;
-
-            //double osnovica_ukupno = 0;
-            //double SveUkupno = 0;
-            //double pdv_ukupno = 0;
-            //double RabatSve = 0;
-
-            //DataTable DT = dSRfakturaStavke.Tables[0];
-
-            //for (int i = 0; i < DT.Rows.Count; i++)
-            //{
-            //    vpc_stavka = Convert.ToDouble(DT.Rows[i]["vpc"].ToString());
-            //    kol_stavka = Convert.ToDouble(DT.Rows[i]["kolicina"].ToString());
-            //    pdv = Convert.ToDouble(DT.Rows[i]["porez"].ToString());
-            //    rabat = Convert.ToDouble(DT.Rows[i]["rabat"].ToString());
-
-            //    rabat_stavka = (((vpc_stavka * pdv / 100) + vpc_stavka) * kol_stavka) * rabat / 100;
-            //    mpc_stavka = Convert.ToDouble(((((vpc_stavka * pdv / 100) + vpc_stavka) * kol_stavka) - rabat_stavka).ToString("#0.00"));
-            //    pdv_stavka = mpc_stavka - (mpc_stavka / Convert.ToDouble("1," + pdv));
-            //    osnovica_stavka = mpc_stavka - pdv_stavka;
-
-            //    RabatSve = rabat_stavka + RabatSve;
-            //    osnovica_ukupno = osnovica_stavka + osnovica_ukupno;
-            //    pdv_ukupno = pdv_stavka + pdv_ukupno;
-            //    SveUkupno = mpc_stavka + SveUkupno;
-            //}
 
             double vpc_stavka = 0;
             double kol_stavka = 0;
@@ -686,49 +649,12 @@ namespace PCPOS.Report.Faktura
             porez_potrosnja = SveUkupno - pdv_ukupno - osnovica_ukupno;
             SveUkupno = osnovica_ukupno + pdv_ukupno + potrosnjaUkupno - RabatSve;
 
-            //string broj_slovima = broj_u_text.PretvoriBrojUTekst(SveUkupno.ToString(), ',', "kn", "lp").ToString();
-
-            //string sql = "SELECT " +
-            //    " ponude.broj_ponude," +
-            //    " ponude.date AS datum," +
-            //    " ponude.vrijedi_do AS datum_dvo," +
-            //    //" ponude.mj_troska AS mjesto_troska," +
-            //    " nacin_placanja.naziv_placanja AS placanje," +
-            //    " otprema.naziv AS otprema," +
-            //    " CAST (ponude.model AS nvarchar) + '  '+ CAST (ponude.broj_ponude AS nvarchar)+CAST (ponude.godina_ponude AS nvarchar)+'-'+CAST (ponude.id_fakturirati AS nvarchar) AS model," +
-            //    " ponude.napomena," +
-            //    " '" + RabatSve + "' AS rabat," +
-            //    " '" + SveUkupno + "' AS ukupno," +
-            //    " '" + pdv_ukupno + "' AS iznos_pdv," +
-            //    " '" + osnovica_ukupno + "' AS osnovica," +
-            //    " ponude.godina_ponude," +
-            //    " CAST (ponude.broj_ponude AS nvarchar) +'/'+ CAST (ponude.godina_ponude AS nvarchar) AS Naslov," +
-            //    " partners.ime_tvrtke AS kupac_tvrtka," +
-            //    " 'Vrijedi do:' AS naziv_date1," +
-            //    " partners.adresa AS kupac_adresa," +
-            //    " partners.id_grad AS id_kupac_grad," +
-            //    " partners.id_partner AS sifra_kupac," +
-            //    " ziro_racun.ziroracun AS zr," +
-            //    " zaposlenici.ime + ' ' + zaposlenici.prezime AS izradio," +
-            //    " ziro_racun.banka AS banka," +
-            //    " '" + broj_slovima.ToLower() + "' AS broj_slovima," +
-            //    " partners.oib AS kupac_oib" +
-            //    " FROM ponude" +
-            //    " LEFT JOIN partners ON partners.id_partner=ponude.id_fakturirati" +
-            //    " LEFT JOIN otprema ON otprema.id_otprema=ponude.otprema" +
-            //    " LEFT JOIN nacin_placanja ON nacin_placanja.id_placanje=ponude.id_nacin_placanja" +
-            //    " LEFT JOIN ziro_racun ON ziro_racun.id_ziroracun=ponude.zr" +
-            //    " LEFT JOIN zaposlenici ON zaposlenici.id_zaposlenik=ponude.id_zaposlenik_izradio WHERE ponude.broj_ponude='" + broj + "'" +
-            //    "";
-
             string broj_slovima = broj_u_text.PretvoriBrojUTekst(SveUkupno.ToString(), ',', "kn", "lp").ToString();
 
             string sql = "SELECT " +
                 " ponude.broj_ponude," +
                 " ponude.date AS datum," +
                 " ponude.vrijedi_do AS datum_dvo, '1970-01-01' as datum_valute, " +
-                //" ponude.datum_valute," +
-                //" ponude.mj_troska AS mjesto_troska," +
                 " nacin_placanja.naziv_placanja AS placanje," +
                 " otprema.naziv AS otprema," +
                 " CAST (ponude.model AS nvarchar) + '  '+ CAST (ponude.broj_ponude AS nvarchar)+CAST (ponude.godina_ponude AS nvarchar)+'-'+CAST (ponude.id_fakturirati AS nvarchar) AS model," +
